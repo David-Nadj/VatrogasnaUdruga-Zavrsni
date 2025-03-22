@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+VatrogasnaUdruga/.vs
+
+VatrogasnaUdruga/obj
+VatrogasnaUdruga/bin
