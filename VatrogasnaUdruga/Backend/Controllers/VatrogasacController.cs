@@ -80,6 +80,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNovogVatrogasca(String ime, String prezime, String brojTelefona, int? godinaRodenja)
         {
             var noviVatrogasac = new Vatrogasac

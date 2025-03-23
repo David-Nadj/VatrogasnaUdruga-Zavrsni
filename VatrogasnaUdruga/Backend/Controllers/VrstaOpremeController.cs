@@ -68,6 +68,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNovuVrstuOpreme(String vrsta)
         {
             var novaVrsta = new VrstaOpreme
@@ -85,6 +86,26 @@ namespace VatrogasnaUdruga.Backend.Controllers
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novaVrsta);
+        }
+
+        [HttpPut]
+        [Route("uredi")]
+        public IActionResult UrediVozilo(int sifra, String vrstaVozila)
+        {
+            var vrsta = _context.VrstaVozilas.FirstOrDefault(v => v.Sifra == sifra);
+            if (vrsta == null)
+            {
+                return NotFound(new { message = "Vrsta nije pronađeno" });
+            }
+
+            int sifraVrste = vrsta.Sifra;
+
+            vrsta.Vrsta = vrstaVozila;
+
+            _context.VrstaVozilas.Update(vrsta);
+            _context.SaveChanges();
+
+            return Ok(vrsta);
         }
     }
 }

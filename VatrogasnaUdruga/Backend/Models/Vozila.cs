@@ -16,7 +16,7 @@ public partial class Vozila : Entitet
     public DateOnly? DatumProizvodnje { get; set; }
 
     public DateOnly DatumZadnjeRegistracije { get; set; }
-    [ForeignKey("Vozila")]
+    [ForeignKey("VrstaVozila")]
     public int VrstaVozilaSifra { get; set; }
     [JsonIgnore]
     public virtual VrstaVozila VrstaVozilaSifraNavigation { get; set; } = null!;

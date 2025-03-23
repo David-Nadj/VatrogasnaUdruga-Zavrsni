@@ -79,6 +79,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNovuOpremu(String naziv, String? opis, DateOnly? datumProvjereValjanosti, DateOnly? datumKrajaValjanosti,int vrstaOpremeSifra)
         {
             var novaOprema = new Oprema

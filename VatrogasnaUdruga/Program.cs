@@ -13,9 +13,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<VatrogasnaUdrugaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VatrogasnaUdrugaContext"))
 );
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
-
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

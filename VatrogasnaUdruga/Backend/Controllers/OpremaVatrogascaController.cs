@@ -134,8 +134,9 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
 
-        ///
+        
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult DodajOpremuVatrogascu(String nazivVatrogasca, String nazivOpreme, int kolicina)
         {
             if (kolicina < 1)

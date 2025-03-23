@@ -127,6 +127,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult DodajOpremuUSpremnik(String nazivSpremnika, String nazivOpreme, int kolicina)
         {
             if (kolicina < 1)

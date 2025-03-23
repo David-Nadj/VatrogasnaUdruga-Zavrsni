@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -81,37 +82,65 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult KreirajNovoVozilo(String naziv, int brojSjedala, String registracija, DateOnly? datumProizvodnje, DateOnly datumZadnjeRegistracije, String vrstaVozila)
+        [Route("dodaj")]
+        public IActionResult KreirajNovoVozilo([FromBody] VozilaDTO vozilo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var vrsta = _context.VrstaVozilas
-                .Where(f => f.Vrsta.Contains(vrstaVozila))
-                .FirstOrDefault();
+                .FirstOrDefault(f => f.Sifra == vozilo.VrstaVozilaSifra);
 
             if (vrsta == null)
             {
-                return NotFound(new { message = "Vrtsa vozila nije pronađena" });
+                return NotFound(new { message = "Vrsta vozila nije pronađena" });
             }
-            int sifraVrste = vrsta.Sifra;
 
             var novoVozilo = new Vozila
             {
-                Naziv = naziv,
-                BrojSjedala = brojSjedala,
-                Registracija = registracija,
-                DatumProizvodnje = datumProizvodnje,
-                DatumZadnjeRegistracije = datumZadnjeRegistracije,
-                VrstaVozilaSifra = sifraVrste
+                Naziv = vozilo.Naziv,
+                BrojSjedala = vozilo.BrojSjedala,
+                Registracija = vozilo.Registracija,
+                DatumProizvodnje = vozilo.DatumProizvodnje,
+                DatumZadnjeRegistracije = vozilo.DatumZadnjeRegistracije,
+                VrstaVozilaSifra = vozilo.VrstaVozilaSifra
             };
-
-            if (novoVozilo == null)
-            {
-                return NoContent();
-            }
 
             _context.Vozilas.Add(novoVozilo);
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novoVozilo);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVozilo(int sifra, [FromBody] VozilaDTO uredenoVozilo)
+        {
+            var vozilo = _context.Vozilas.FirstOrDefault(v => v.Sifra == sifra);
+            if (vozilo == null)
+            {
+                return NotFound(new { message = "Vozilo nije pronađeno" });
+            }
+
+            var vrsta = _context.VrstaVozilas.FirstOrDefault(f => f.Sifra == (uredenoVozilo.VrstaVozilaSifra));
+            if (vrsta == null)
+            {
+                return NotFound(new { message = "Vrsta vozila nije pronađena" });
+            }
+
+            vozilo.Naziv = uredenoVozilo.Naziv;
+            vozilo.BrojSjedala = uredenoVozilo.BrojSjedala;
+            vozilo.Registracija = uredenoVozilo.Registracija;
+            vozilo.DatumProizvodnje = uredenoVozilo.DatumProizvodnje;
+            vozilo.DatumZadnjeRegistracije = uredenoVozilo.DatumZadnjeRegistracije;
+            vozilo.VrstaVozilaSifra = uredenoVozilo.VrstaVozilaSifra;
+
+            _context.Vozilas.Update(vozilo);
+            _context.SaveChanges();
+
+            return Ok(vozilo);
         }
     }
 }

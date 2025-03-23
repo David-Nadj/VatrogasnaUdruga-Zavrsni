@@ -79,6 +79,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNoviSpremnik(String naziv)
         {
             var noviSpremnik = new Spremnik

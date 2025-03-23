@@ -79,12 +79,8 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
 
-
-
-
-
-
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNovoSkladiste(String naziv, String? adresa)
         {
             var novoSkladiste = new Skladiste

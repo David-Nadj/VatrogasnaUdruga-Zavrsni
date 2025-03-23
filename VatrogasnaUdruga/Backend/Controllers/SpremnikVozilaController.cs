@@ -126,6 +126,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult DodajSpremnikUVozilo(String nazivSpremnika, String nazivVozila)
         {
             var spremnik = _context.Spremniks

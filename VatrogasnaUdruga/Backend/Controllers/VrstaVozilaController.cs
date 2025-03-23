@@ -67,6 +67,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPost]
+        [Route("dodaj")]
         public IActionResult KreirajNovuVrstuVozila(String vrsta)
         {
             var novaVrsta = new VrstaVozila
