@@ -7,8 +7,6 @@ namespace VatrogasnaUdruga.Backend.Models;
 
 public partial class Oprema:Entitet
 {
-  
-
     public string Naziv { get; set; } = null!;
 
     public string? Opis { get; set; }
