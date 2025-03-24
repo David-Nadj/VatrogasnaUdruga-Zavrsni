@@ -31,9 +31,7 @@ export default function VozilaDodaj() {
     hideLoading();
     setVrsteVozila(odgovor.poruka);
     showLoading();
-    console.log(routeParams.sifra)
     const vozilaPodatci = await VozilaService.getBySifra(routeParams.sifra);
-    console.log(vozilaPodatci.poruka)
 
     setVozila(vozilaPodatci);
     hideLoading();
@@ -83,7 +81,7 @@ export default function VozilaDodaj() {
 
   return (
     <>
-      Dodavanje nove grupe
+      Uredi vozilo
       
       <Form onSubmit={obradiSubmit}>
         <Form.Group controlId="naziv">

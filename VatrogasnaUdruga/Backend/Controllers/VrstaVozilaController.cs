@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -68,12 +69,16 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNovuVrstuVozila(String vrsta)
+        public IActionResult KreirajNovuVrstuVozila([FromBody] VrsteVozilaDTO vrsta)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var novaVrsta = new VrstaVozila
             {
-                Vrsta = vrsta,
-              
+                Vrsta = vrsta.Vrsta
             };
 
             if (novaVrsta == null)
@@ -85,6 +90,24 @@ namespace VatrogasnaUdruga.Backend.Controllers
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novaVrsta);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVrstuVozilo(int sifra, [FromBody] VrsteVozilaDTO uredenaVrstaVozilo)
+        {
+            var vrstaVozila = _context.VrstaVozilas.FirstOrDefault(v => v.Sifra == sifra);
+            if (vrstaVozila == null)
+            {
+                return NotFound(new { message = "Vozilo nije pronađeno" });
+            }
+
+            vrstaVozila.Vrsta = uredenaVrstaVozilo.Vrsta;
+
+            _context.VrstaVozilas.Update(vrstaVozila);
+            _context.SaveChanges();
+
+            return Ok(vrstaVozila);
         }
     }
 }

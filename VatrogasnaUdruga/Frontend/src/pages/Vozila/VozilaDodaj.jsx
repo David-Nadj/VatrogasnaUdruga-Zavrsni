@@ -65,7 +65,7 @@ export default function VozilaDodaj() {
 
   return (
       <>
-      Dodavanje nove grupe
+      Dodavanje novog vozila
       
       <Form onSubmit={obradiSubmit}>
           <Form.Group controlId="naziv">

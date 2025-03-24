@@ -20,8 +20,8 @@ async function brisanje(sifra){
     })
 }
 
-async function dodaj(vozilo){
-    return await HttpService.post('/VrstaVozila/dodaj/',vozilo)
+async function dodaj(vrsta){
+    return await HttpService.post('/VrstaVozila/dodaj/', vrsta)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })

@@ -25,11 +25,11 @@ export default function NavBarEdunova(){
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VOZILA_NOVO)}>Dodaj novo vozilo</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Vrste vozila" id="basic-nav-dropdown">
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VOZILA)}>Pregled vrste vozila</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Dodaj novu vrstu vozila</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Pregled vrste vozila</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Dodaj novu vrstu vozila</NavDropdown.Item>
           </NavDropdown>
           <Nav className="me-auto">
-            <Nav.Link onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Vrste Vozila</Nav.Link>
+            <Nav.Link onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>TEST</Nav.Link>
           </Nav>
         </Navbar.Collapse>
     </Navbar>

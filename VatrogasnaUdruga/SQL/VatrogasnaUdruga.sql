@@ -10,6 +10,10 @@
 --drop table vrstaOpreme
 --drop table vrstaVozila
 
+SELECT name, collation_name 
+FROM sys.databases 
+WHERE name = 'db_ab6b2b_vatrogasnaudruga';
+
 create table vrstaVozila (
 	sifra int not null identity (1,1) primary key,
 	vrsta varchar (30) not null
@@ -95,66 +99,51 @@ insert into vrstaVozila (vrsta) values
 	('Autoljestve');
 
 insert into oprema (naziv, vrstaOpremeSifra, datumKrajaValjanosti, datumProvjereValjanosti, opis) values 
-	('Vatrogasna kaciga', 2, '2030-02-12', '2025-02-12', 'Namijenjena je da štiti glavu vatrogasca od mehanickih ozljeda koje nastaju zbog pada ili udarca nekog predmeta, 
-		takoder štite od toplinskog isijavanja i plamena, niskih temperatura i elektricne struje'),
-	('Penjački opasač', 2, '2033-02-11', '2024-02-12', 'Izradujese od kože ili poliesterskih vlakana u 4 dužine. Održava se prema uputi
-		prodavaca.'),
-	('Zaštitna maska',6, '2020-10-02', '2025-07-17', 'Zaštitna maska koristi se za zaštitu dišnih puteva vatrogasaca od dima, otrovnih plinova i vruceg zraka.'),
-	('Vatrogasne Zaštitne čizme sa ojačanim đonom i čeličnim kapicama',2, '2020-10-02', '2025-07-17', ' Gornjište-Visokokvalitetna hidrofobirana i 
-		vatrootporna goveda koža, debljine 2,3 - 2,5 mm ,Podstava-Sympatex vodonepropusna membrana,Potplat-NBR GUMA, montažni don  Kapica-Celicna / kompozitna Tabanica-Celicna / kompozitn'),
+	('Vatrogasna kaciga', 2, '2030-02-12', '2025-02-12', 'Namijenjena je da štiti glavu vatrogasca od mehaničkih ozljeda koje nastaju zbog pada ili udarca nekog predmeta, također štite od toplinskog isijavanja i plamena, niskih temperatura i električne struje'),
+	('Penjački opasač', 2, '2033-02-11', '2024-02-12', 'Izrađuje se od kože ili poliesterskih vlakana u 4 dužine. Održava se prema uputi prodavača.'),
+	('Zaštitna maska',6, '2020-10-02', '2025-07-17', 'Zaštitna maska koristi se za zaštitu dišnih puteva vatrogasaca od dima, otrovnih plinova i vrućeg zraka.'),
+	('Vatrogasne Zaštitne čizme sa ojačanim đonom i čeličnim kapicama',2, '2020-10-02', '2025-07-17', ' Gornjište-Visokokvalitetna hidrofobiran i vatrootporna goveda koža, debljine 2,3 - 2,5 mm ,Podstava-Sympatex vodonepropusna membrana,Potplat-NBR GUMA, montažni don  Kapica-Celicna / kompozitna Tabanica-Celicna / kompozitni'),
 	('Zaštitne rukavice', 2, '2035-12-10', '2023-01-12', 'potpuno vodonepropusna i paropropusna sa Gore-Tex membranom'),
-	('Zaštitne hlače i jakna', 2, '2035-12-10', '2023-01-12', 'Vatrogasne zaštitne hlace i jakna su osnovni dio osobne zaštitne opreme vatrogasaca i služe za zaštitu tijela od toplinskih, mehanickih i kemijskih utjecaja tijekom intervencija.'),
-    ('Cijevni mostići', 9, '2035-12-10', '2023-01-12', 'Omogucuju preijlaz vozila preko tlacnih cijevi.'),	
-	('Usisna vatrogasna cijev veličine B', 3, '2035-12-10', '2023-01-12', 'Izraduju se iz gume, s platnenim ili tkanim tekstilnim 
-		uloškom, a u gumu je uvulkanizirana celicna spirala, Guma daje nepropusnost, tekstilni uložak služi kao 
-		armatura, a celicna spirala omogucava zadržavanje poprecnog presjeka kad se u cijevi stvara podtlak'),
-	('Usisna vatrogasna cijev veličine A', 3, '2035-12-10', '2023-01-12', 'Izraduju se iz gume, s platnenim ili tkanim tekstilnim 
-		uloškom, a u gumu je uvulkanizirana celicna spirala, Guma daje nepropusnost, tekstilni uložak služi kao 
-		armatura, a celicna spirala omogucava zadržavanje poprecnog presjeka kad se u cijevi stvara podtlak'),
-	('Vatrogasna cijev veličine B', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevu su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni, Promjer: 75 mm (3 cola)Radni tlak: Obicno do 16 bara,Kapacitet protoka: Otprilike 800-1600 litara/min'),
-	('Vatrogasna cijev veličine C', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevu su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni. Promjer: 52 mm (2 cola)Radni tlak: Obicno do 16 bara,Kapacitet protoka: Otprilike 200-800 litara/min'),
-	('Vatrogasna cijev veličine D', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevu su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni.Promjer: 25 mm (1 cola)Radni tlak: Obicno do 16 bara, Kapacitet protoka: Otprilike 50-200 litara/min'),
-	('Odijela za zaštitu od kontaminacije', 9, '2035-12-10', '2023-01-12', 'Štiti vatrogasca od tekucina, aerosola, i drugih oblika 
-		kontaminacije'),---13
-	('Eksplozimetar', 9, '2035-12-10', '2023-01-12', 'Eksplozimetar uredaj koji mjeri koncentraciju zapaljivih plinova i para, kisika i ugljicnog monoksida.'),
-	('Vatrogasna pumpa', 1, '2035-12-10', '2023-01-12', ' Glavna svrha vatrogasne pumpe je omoguciti ucinkovito gašenje požara osiguravajuci snažan i kontinuiran mlaz vode ili pjene.'),
+	('Zaštitne hlače i jakna', 2, '2035-12-10', '2023-01-12', 'Vatrogasne zaštitne hlače i jakna su osnovni dio osobne zaštitne opreme vatrogasaca i služe za zaštitu tijela od toplinskih, mehaničkih i kemijskih utjecaja tijekom intervencija.'),
+    ('Cijevni mostići', 9, '2035-12-10', '2023-01-12', 'Omogućuju prijelaz vozila preko tlačnih cijevi.'),	
+	('Usisna vatrogasna cijev veličine B', 3, '2035-12-10', '2023-01-12', 'Izrađuju se iz gume, s platnenim ili tkanim tekstilnim uloškom, a u gumu je vulkanizirana čelična spirala, Guma daje nepropusnost, tekstilni uložak služi kao armatura, a čelična spirala omogućava zadržavanje poprečnog presjeka kad se u cijevi stvara podtlak'),
+	('Usisna vatrogasna cijev veličine A', 3, '2035-12-10', '2023-01-12', 'Izrađuju se iz gume, s platnenim ili tkanim tekstilnim uloškom, a u gumu je vulkanizirana čelična spirala, Guma daje nepropusnost, tekstilni uložak služi kao armatura, a čelična spirala omogućava zadržavanje poprečnog presjeka kad se u cijevi stvara podtlak'),
+	('Vatrogasna cijev veličine B', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevi su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni, Promjer: 75 mm (3 cola)Radni tlak: Obično do 16 bara,Kapacitet protoka: Otprilike 800-1600 litara/min'),
+	('Vatrogasna cijev veličine C', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevi su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni. Promjer: 52 mm (2 cola)Radni tlak: Obično do 16 bara,Kapacitet protoka: Otprilike 200-800 litara/min'),
+	('Vatrogasna cijev veličine D', 3, '2035-12-10', '2023-01-12', 'Vatrogasne cijevi su opreme koje služe za prijenos vode pod visokim tlakom od vatrogasne pumpe do mlaznice ili mjesta požara. Razlikuju se po promjeru, kapacitetu protoka i namjeni.Promjer: 25 mm (1 cola)Radni tlak: Obično do 16 bara, Kapacitet protoka: Otprilike 50-200 litara/min'),
+	('Odijela za zaštitu od kontaminacije', 9, '2035-12-10', '2023-01-12', 'Štiti vatrogasca od tekućina, aerosola, i drugih oblika kontaminacije'),---13
+	('Eksplozimetar', 9, '2035-12-10', '2023-01-12', 'Eksplozimetar uređaj koji mjeri koncentraciju zapaljivih plinova i para, kisika i ugljičnog monoksida.'),
+	('Vatrogasna pumpa', 1, '2035-12-10', '2023-01-12', ' Glavna svrha vatrogasne pumpe je omogućiti učinkovito gašenje požara osiguravajući snažan i kontinuiran mlaz vode ili pjene.'),
 	('Cijevne povezice', 4, '2035-12-10', '2023-01-12', ''),
-	('Cijevni nosač', 9, '2035-12-10', '2023-01-12', ' Cijevni nosac je vatrogasna oprema koja služi za sigurno postavljanje i pridržavanje vatrogasnih crijeva tijekom intervencija. Njegova glavna funkcija je sprijeciti savijanje, uvijanje ili nekontrolirano pomicanje cijevi dok voda tece pod visokim tlakom.'),
-	('Cijevni držac', 9, '2035-12-10', '2023-01-12', 'Cijevni držac je vatrogasna oprema koja se koristi za pridržavanje i vodenje vatrogasnih crijeva tijekom intervencija. Njegova glavna funkcija je olakšati manipulaciju crijevima, omoguciti bolju kontrolu mlaza vode i smanjiti opterecenje vatrogasaca.'),
+	('Cijevni nosač', 9, '2035-12-10', '2023-01-12', ' Cijevni nosač je vatrogasna oprema koja služi za sigurno postavljanje i pridržavanje vatrogasnih crijeva tijekom intervencija. Njegova glavna funkcija je spriječiti savijanje, uvijanje ili nekontrolirano pomicanje cijevi dok voda teče pod visokim tlakom.'),
+	('Cijevni držač', 9, '2035-12-10', '2023-01-12', 'Cijevni držač je vatrogasna oprema koja se koristi za pridržavanje i vođenje vatrogasnih crijeva tijekom intervencija. Njegova glavna funkcija je olakšati manipulaciju crijevima, omogućiti bolju kontrolu mlaza vode i smanjiti opterećenje vatrogasaca.'),
 	('Torbica sa užetom', 9, '2035-12-10', '2023-01-12', ''),---19
-	('Cijevno vitlo', 3, '2035-12-10', '2023-01-12', 'Cijevno vitlo služi za skladištenje i brzo izvlacenje vatrogasnih crijeva.'),
-	('Vatrogasna mlaznica obična', 4, '2035-12-10', '2023-01-12', 'Konstrukcijski su najjednostavnije, nemaju mogucnost prekidanja mlaza vode i mogu 
-		dati samo puni mlaz vode, Oznacavaju se imenom i oznakom promjera prikljucne spojnice (B,C,D)'),
-	('Vatrogasna mlaznica univerzalna', 4, '2035-12-10', '2023-01-12', 'Imaju mogucnost prekidanja mlaza vode, mogu dati puni, raspršeni ili zaštitni mlaz (ne i kombinaciju)'),
-	('Vatrogasna mlaznica sa zatvaračem', 4, '2035-12-10', '2023-01-12', 'Imaju mogucnost prekidanja mlaza.'),
-	('Vatrogasna mlaznica pištolj', 4, '2035-12-10', '2023-01-12', ' Visokotlacna mlaznica koja se koristi na vitlima za brzu navalu, Visoki tlak(30-60 bara), uz mali protok (do 200 l/min)
-		Daje puni i raspršeni mlaz, uz poseban nastavak mogu dati i pjenu'),
-	('Vatrogasna mlaznica monsun', 4, '2035-12-10', '2023-01-12', ' Ima raspršivac specijalne konstrukcije tako da gasi raspršenom vodom, razvijena je kao mlaznica za gašenje uredeja pod naponom'),
-	('Vatrogasna mlaznica dubinska', 4, '2035-12-10', '2023-01-12', 'Koristi se za gašenje tinjajucih i dubinskih požara, požara ugljena, piljevine i žita
-		 cijevni dio dug oko 1,5 m sa sitnim rupicama po plaštu mlaznic'),
-	('Razdjelnica', 4, '2035-12-10', '2023-01-12', 'Služi za raspodjelu jednog vodenog toka u 2 ili 3, odnosno za ukljucivanje ili 
-		iskljucivanje pojednih cijevnih pruga ili potrošaca koda su spojene na izvor.'),---27
-	('Ublaživač reakcije vodenog mlaza', 4, '2035-12-10', '2023-01-12', 'vatrogasna armatura pomocu koje mlaznicar smanjuje reakciju pri korištenju 
-		mlaza'),
+	('Cijevno vitlo', 3, '2035-12-10', '2023-01-12', 'Cijevno vitlo služi za skladištenje i brzo izvlačenje vatrogasnih crijeva.'),
+	('Vatrogasna mlaznica obična', 4, '2035-12-10', '2023-01-12', 'Konstrukcijski su najjednostavnije, nemaju mogućnost prekidanja mlaza vode i mogu dati samo puni mlaz vode, Označavaju se imenom i oznakom promjera priključne spojnice (B,C,D)'),
+	('Vatrogasna mlaznica univerzalna', 4, '2035-12-10', '2023-01-12', 'Imaju mogućnost prekidanja mlaza vode, mogu dati puni, raspršeni ili zaštitni mlaz (ne i kombinaciju)'),
+	('Vatrogasna mlaznica sa zatvaračem', 4, '2035-12-10', '2023-01-12', 'Imaju mogućnost prekidanja mlaza.'),
+	('Vatrogasna mlaznica pištolj', 4, '2035-12-10', '2023-01-12', ' Visokotlačna mlaznica koja se koristi na vitlima za brzu navalu, Visoki tlak(30-60 bara), uz mali protok (do 200 l/min)Daje puni i raspršeni mlaz, uz poseban nastavak mogu dati i pjenu'),
+	('Vatrogasna mlaznica monsun', 4, '2035-12-10', '2023-01-12', ' Ima raspršivač specijalne konstrukcije tako da gasi raspršenom vodom, razvijena je kao mlaznica za gašenje uređaja pod naponom'),
+	('Vatrogasna mlaznica dubinska', 4, '2035-12-10', '2023-01-12', 'Koristi se za gašenje tinjajućih i dubinskih požara, požara ugljena, piljevine i žitacijevni dio dug oko 1,5 m sa sitnim rupicama po plaštu mlaznice'),
+	('Razdjelnica', 4, '2035-12-10', '2023-01-12', 'Služi za raspodjelu jednog vodenog toka u 2 ili 3, odnosno za uključivanje ili isključivanje pojedinih cijevnih pruga ili potrošača koda su spojene na izvor.'),---27
+	('Ublaživač reakcije vodenog mlaza', 4, '2035-12-10', '2023-01-12', 'vatrogasna armatura pomoću koje mlazničar smanjuje reakciju pri korištenju mlaza'),
 	('Hidraulične škare ',9, '2018-06-03', '2025-01-30', 'Alat za rezanje metala i širenje olupina tijekom spašavanja iz vozila.'),
-	('Radio stanica za komunikaciju', 9, '2022-03-25', '2025-07-05', 'Mobilna radio stanica za komunikaciju izmedu vatrogasnih timova.'),
-	('Uže za spašavanje',  7, '2021-10-10', '2025-03-11', 'Specijalno vatrootporno uže za izvlacenje i spuštanje tijekom intervencija s visine.'),
-	('Nosila za spašavanje', 9, '2020-01-01', '2025-04-12', 'Skopiva nosila za hitan prijevoz ozlijedenih osoba s mjesta nesrece.'),
-	('Termalna kamera', 9, '2021-08-22', '2025-02-15', 'Kamera koja omogucuje prepoznavanje izvora topline i pronalaženje žrtava u zadimljenim prostorima.'),
+	('Radio stanica za komunikaciju', 9, '2022-03-25', '2025-07-05', 'Mobilna radio stanica za komunikaciju između vatrogasnih timova.'),
+	('Uže za spašavanje',  7, '2021-10-10', '2025-03-11', 'Specijalno vatrootporno uže za izvlačenje i spuštanje tijekom intervencija s visine.'),
+	('Nosila za spašavanje', 9, '2020-01-01', '2025-04-12', 'Sklopiva nosila za hitan prijevoz ozlijeđenih osoba s mjesta nesreće.'),
+	('Termalna kamera', 9, '2021-08-22', '2025-02-15', 'Kamera koja omogućuje prepoznavanje izvora topline i pronalaženje žrtava u zadimljenim prostorima.'),
 	('Lopata za uklanjanje prepreka', 9, '2020-12-11', '2025-06-22', 'Robusna vatrogasna lopata za uklanjanje ruševina i prepreka tijekom spašavanja.'),
-	('Prva pomoć - osnovni set', 9, '2019-09-20', '2025-01-10', 'Osnovni set za pružanje prve pomoci s medicinskim potrepštinama.'),
+	('Prva pomoć - osnovni set', 9, '2019-09-20', '2025-01-10', 'Osnovni set za pružanje prve pomoći s medicinskim potrepštinama.'),
 	('Sjekira za vatrogasne intervencije', 9, '2021-01-14', '2025-04-05', 'Teška sjekira s oštricom za probijanje i rezanje materijala.'),
 	('Ventilator za odimljavanje', 9, '2022-02-28', '2025-08-19', 'Mobilni ventilator za uklanjanje dima iz zatvorenih prostora.'),
-	('Protupožarni aparat s prahom', 5, '2018-11-13', '2025-03-29', 'Aparat za gašenje požara s prahom, idealan za elektricne i zapaljive tekucine.'),
+	('Protupožarni aparat s prahom', 5, '2018-11-13', '2025-03-29', 'Aparat za gašenje požara s prahom, idealan za električne i zapaljive tekućine.'),
 	('Svjetiljka za intervencije',9, '2019-05-23', '2025-09-01', 'Snažna prijenosna svjetiljka otporna na vodu i udarce.'),
-	('Alat za probijanje vrata',9, '2020-10-02', '2025-07-17', 'Specijalni alat za brzu intervenciju i probijanje zakljucanih vrata.'),
-	('Medumješalica',9, '2020-10-02', '2025-07-17', 'Vatrogasne medumješalice su uredaji koji se koriste za miješanje vode i pjenila kako bi se stvorila vatrogasna pjena potrebna za gašenje požara zapaljivih tekucina ili drugih materijala koji se ne mogu ucinkovito gasiti vodom.'),
-	(' Mlaznica za pjenu',4, '2020-10-02', '2025-07-17', 'Vatrogasne mlaznice za pjenu su posebne mlaznice koje se koriste za raspršivanje pjenila pomiješanog s vodom u obliku guste i stabilne pjene. Njihova glavna funkcija je stvaranje pjene koja se koristi za gašenje požara zapaljivih tekucina (klasa B) i cvrstih materijala impregniranih zapaljivim tvarima.'),
-	('Aparati za početno gašenje požara CO2',5, '2020-10-02', '2025-07-17', 'Vatrogasni aparati za gašenje požara sa ugljicnim 
-		dioksidom (CO2) namijenjeni su za gašenje požara uredaja pod elektricnim naponom, a mogu se koristiti za gašenje pocetnih požara razreda B i C'),
+	('Alat za probijanje vrata',9, '2020-10-02', '2025-07-17', 'Specijalni alat za brzu intervenciju i probijanje zaključanih vrata.'),
+	('Međumiješalica',9, '2020-10-02', '2025-07-17', 'Vatrogasne međumiješalica su uređaji koji se koriste za miješanje vode i pjenila kako bi se stvorila vatrogasna pjena potrebna za gašenje požara zapaljivih tekućina ili drugih materijala koji se ne mogu učinkovito gasiti vodom.'),
+	(' Mlaznica za pjenu',4, '2020-10-02', '2025-07-17', 'Vatrogasne mlaznice za pjenu su posebne mlaznice koje se koriste za raspršivanje pjenila pomiješanog s vodom u obliku guste i stabilne pjene. Njihova glavna funkcija je stvaranje pjene koja se koristi za gašenje požara zapaljivih tekućina (klasa B) i čvrstih materijala impregniranih zapaljivim tvarima.'),
+	('Aparati za početno gašenje požara CO2',5, '2020-10-02', '2025-07-17', 'Vatrogasni aparati za gašenje požara sa ugljičnim dioksidom (CO2) namijenjeni su za gašenje požara uređaja pod električnim naponom, a mogu se koristiti za gašenje početnih požara razreda B i C'),
 	('Vatrogasne ljestve',7, '2020-10-02', '2025-07-17',''), 
-	('Izolacijski aparat sa stlačenim zrakom',6, '2020-10-02', '2025-07-17', ' Nacin rada– Zasniva se na ospkrbi korisnika cistim 
-		zrakom za disanje iz boce– Zrak iz boce prolazi kroz ventil za redukciju, te preko tlacne cijevi dolazi do plucnog automata koji regulira protok dovoljne kolicine zraka– Izdahnuti zrak preko izdišnog ventila na zaštitnoj masci izlazi u atmosfer'),
+	('Izolacijski aparat sa stlačenim zrakom',6, '2020-10-02', '2025-07-17', ' Način rada– Zasniva se na opskrbi korisnika čistim zrakom za disanje iz boce– Zrak iz boce prolazi kroz ventil za redukciju, te preko tlačne cijevi dolazi do plućnog automata koji regulira protok dovoljne količine zraka– Izdahnuti zrak preko izdišnog ventila na zaštitnoj masci izlazi u atmosferu'),
 	('Hidraulična pumpa',9, '2020-10-02', '2025-07-17','')
 ;
  

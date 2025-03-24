@@ -34,13 +34,6 @@ export default function VrsteVozilaPregled(){
        dohvatiVrsteVozila();
     },[])
 
-    function formatirajDatum(datum){
-        if(datum==null){
-            return 'Nije definirano';
-        }
-        return moment.utc(datum).format('DD.MM.YYYY.')
-    }
-
     function obrisi(sifra){
         if(!confirm('Sigurno obrisati?')){
             return;
@@ -59,7 +52,6 @@ export default function VrsteVozilaPregled(){
         dohvatiVrsteVozila();
     }
 
-
     return(
         <>
         <Link to={RouteNames.VRSTA_VOZILA_NOVO}
@@ -77,9 +69,9 @@ export default function VrsteVozilaPregled(){
                             {vrsta.vrsta}
                         </td>
                         <td>
-                            <Button variant="danger" onClick={()=>obrisi(vozilo.sifra)}>Ukloni</Button>
+                            <Button variant="danger" onClick={()=>obrisi(vrsta.sifra)}>Ukloni</Button>
                             &nbsp;&nbsp;&nbsp;
-                            <Button onClick={()=>navigate(`/vrsteVozila/${vozilo.sifra}`)}>Uredi</Button>
+                            <Button onClick={()=>navigate(`/vrsteVozila/uredi/${vrsta.sifra}`)}>Uredi</Button>
                         </td>
                     </tr>
                 ))}

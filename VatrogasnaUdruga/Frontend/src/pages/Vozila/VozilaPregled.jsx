@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
 import useLoading from "../../hooks/useLoading";
 import useError from '../../hooks/useError';
-
+import VrsteVozilaService from "../../services/VrsteVozilaService";
 
 export default function VozilaPregled(){
 
@@ -17,7 +17,18 @@ export default function VozilaPregled(){
     const { prikaziError } = useError();
 
     const[vozila, setVozila] = useState();
+    const[vrsteVozila, setVrsteVozila] = useState();
 
+    async function dohvatiVrsteVozila(){
+        showLoading();
+        const odgovor = await VrsteVozilaService.get();
+        hideLoading();
+        if(odgovor.greska){
+            prikaziError(odgovor.poruka)
+            return
+        }
+        setVrsteVozila(odgovor.poruka)
+    } 
     async function dohvatiVozila(){
         showLoading();
         const odgovor = await VozilaService.get();
@@ -26,12 +37,12 @@ export default function VozilaPregled(){
             prikaziError(odgovor.poruka)
             return
         }
-        //debugger; // ovo radi u Chrome inspect (ali i ostali preglednici)
         setVozila(odgovor.poruka)
     } 
 
     useEffect(()=>{
        dohvatiVozila();
+       dohvatiVrsteVozila();
     },[])
 
     function formatirajDatum(datum){
@@ -58,7 +69,6 @@ export default function VozilaPregled(){
         }
         dohvatiVozila();
     }
-
 
     return(
         <>
@@ -94,7 +104,9 @@ export default function VozilaPregled(){
                             {formatirajDatum(vozilo.datumZadnjeRegistracije)}
                         </td>
                         <td className="sredina">
-                            {vozilo.vrstaVozilaSifra}
+                        {vrsteVozila 
+                            ? vrsteVozila.find(vrstaVozila => vrstaVozila.sifra === vozilo.vrstaVozilaSifra)?.vrsta || "Nepoznato" 
+                            : "Učitavanje..."}
                         </td>
                         <td>
                             <Button variant="danger" onClick={()=>obrisi(vozilo.sifra)}>Ukloni</Button>
