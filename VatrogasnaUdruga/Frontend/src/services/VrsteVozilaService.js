@@ -16,7 +16,7 @@ async function brisanje(sifra){
         return {greska: false, poruka: 'Obrisano'}
     })
     .catch(()=>{
-        return {greska: true, poruka: 'Problem kod brisanja vrse vozila'}   
+        return {greska: true, poruka: 'Problem kod brisanja vrste vozila'}   
     })
 }
 
