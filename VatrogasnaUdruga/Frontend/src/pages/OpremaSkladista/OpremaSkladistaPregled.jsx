@@ -91,7 +91,6 @@ export default function OpremaSkladistaPregled() {
                   <th>Oprema</th>
                   <th>Količina</th>
                   <th>Vrsta opreme</th>
-                  <th>Detalji</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,7 +99,6 @@ export default function OpremaSkladistaPregled() {
                     <td>{oprema.naziv}</td>
                     <td>{oprema.kolicina}</td> 
                     <td>{oprema.vrstaOpremeNaziv}</td> 
-                    <td>{oprema.opis}</td>
                     <td>
                         <Button variant="primary" className="mr-3">
                             Uredi opremu

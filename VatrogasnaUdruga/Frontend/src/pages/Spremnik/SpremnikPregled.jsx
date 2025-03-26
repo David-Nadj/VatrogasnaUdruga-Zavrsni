@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import VrsteVozilaService from "../../services/VrsteVozilaService"
+import SpremnikService from "../../services/SpremnikService"
 import { Button, Table } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
 import moment from "moment";
@@ -9,73 +9,80 @@ import { RouteNames } from "../../constants";
 import useLoading from "../../hooks/useLoading";
 import useError from '../../hooks/useError';
 
-
-export default function VrsteVozilaPregled(){
+export default function SpremnikPregled(){
 
     const navigate = useNavigate()
     const { showLoading, hideLoading } = useLoading();
     const { prikaziError } = useError();
 
-    const[vrsteVozila, setVrsteVozila] = useState();
+    const[spremici, setSpremnik] = useState();
 
-    async function dohvatiVrsteVozila(){
+    async function dohvatiSpremnik(){
         showLoading();
-        const odgovor = await VrsteVozilaService.get();
+        const odgovor = await SpremnikService.get();
         hideLoading();
         if(odgovor.greska){
             prikaziError(odgovor.poruka)
             return
         }
-        setVrsteVozila(odgovor.poruka)
+        setSpremnik(odgovor.poruka)
     } 
 
     useEffect(()=>{
-       dohvatiVrsteVozila();
+       dohvatiSpremnik();
     },[])
+
+    function formatirajDatum(datum){
+        if(datum==null){
+            return 'Nije definirano';
+        }
+        return moment.utc(datum).format('DD.MM.YYYY.')
+    }
 
     function obrisi(sifra){
         if(!confirm('Sigurno obrisati?')){
             return;
         }
-        brisanjeVrsteVozila(sifra)
+        brisanjeSpremnika(sifra)
     }
 
-    async function brisanjeVrsteVozila(sifra) {
+    async function brisanjeSpremnika(sifra) {
         showLoading();
-        const odgovor = await VrsteVozilaService.brisanje(sifra);
+        const odgovor = await SpremnikService.brisanje(sifra);
         hideLoading();
         if(odgovor.greska){
             prikaziError(odgovor.poruka)
             return
         }
-        dohvatiVrsteVozila();
+        dohvatiSpremnik();
     }
 
     return(
         <>
-        <Link to={RouteNames.VRSTA_VOZILA_NOVO}
-        className="btn btn-success siroko">Dodaj novu vrstu</Link>
+        <Link to={RouteNames.SPREMNIK_NOVO}
+        className="btn btn-success siroko">Dodaj novi spremnik</Link>
         <Table striped bordered hover responsive>
             <thead>
                 <tr>
-                    <th>Vrsta vozila</th>
+                    <th>Naziv</th>
                 </tr>
             </thead>
             <tbody>
-                {vrsteVozila && vrsteVozila.map((vrsta,index)=>(
+                {spremici && spremici.map((spremnik,index)=>(
                     <tr key={index}>
                         <td>
-                            {vrsta.vrsta}
+                            {spremnik.naziv}
                         </td>
+                       
                         <td>
-                            <Button variant="danger" onClick={()=>obrisi(vrsta.sifra)}>Ukloni</Button>
+                            <Button variant="danger" onClick={()=>obrisi(spremnik.sifra)}>Ukloni</Button>
                             &nbsp;&nbsp;&nbsp;
-                            <Button onClick={()=>navigate(`/vrsteVozila/uredi/${vrsta.sifra}`)}>Uredi</Button>
+                            <Button onClick={()=>navigate(`/spremnik/uredi/${spremnik.sifra}`)}>Uredi</Button>
                         </td>
                     </tr>
                 ))}
             </tbody>
         </Table>
         </>
-    )
+    );
 }

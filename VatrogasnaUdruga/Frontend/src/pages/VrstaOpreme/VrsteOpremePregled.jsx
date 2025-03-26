@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import VrsteVozilaService from "../../services/VrsteVozilaService"
+import VrsteOpremeService from "../../services/VrstaOpremeService"
 import { Button, Table } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
 import moment from "moment";
@@ -10,59 +10,60 @@ import useLoading from "../../hooks/useLoading";
 import useError from '../../hooks/useError';
 
 
-export default function VrsteVozilaPregled(){
+export default function VrsteOpremePregled(){
 
     const navigate = useNavigate()
     const { showLoading, hideLoading } = useLoading();
     const { prikaziError } = useError();
 
-    const[vrsteVozila, setVrsteVozila] = useState();
+    const[vrsteOpreme, setVrsteOpreme] = useState();
 
-    async function dohvatiVrsteVozila(){
+    async function dohvatiVrsteOpreme(){
         showLoading();
-        const odgovor = await VrsteVozilaService.get();
+        const odgovor = await VrsteOpremeService.get();
         hideLoading();
         if(odgovor.greska){
             prikaziError(odgovor.poruka)
             return
         }
-        setVrsteVozila(odgovor.poruka)
+        //debugger; // ovo radi u Chrome inspect (ali i ostali preglednici)
+        setVrsteOpreme(odgovor.poruka)
     } 
 
     useEffect(()=>{
-       dohvatiVrsteVozila();
+        dohvatiVrsteOpreme();
     },[])
 
     function obrisi(sifra){
         if(!confirm('Sigurno obrisati?')){
             return;
         }
-        brisanjeVrsteVozila(sifra)
+        brisanjeVrsteOpreme(sifra)
     }
 
-    async function brisanjeVrsteVozila(sifra) {
+    async function brisanjeVrsteOpreme(sifra) {
         showLoading();
-        const odgovor = await VrsteVozilaService.brisanje(sifra);
+        const odgovor = await VrsteOpremeService.brisanje(sifra);
         hideLoading();
         if(odgovor.greska){
             prikaziError(odgovor.poruka)
             return
         }
-        dohvatiVrsteVozila();
+        dohvatiVrsteOpreme();
     }
 
     return(
         <>
-        <Link to={RouteNames.VRSTA_VOZILA_NOVO}
+        <Link to={RouteNames.VRSTA_OPREME_NOVO}
         className="btn btn-success siroko">Dodaj novu vrstu</Link>
         <Table striped bordered hover responsive>
             <thead>
                 <tr>
-                    <th>Vrsta vozila</th>
+                    <th>Vrsta opreme</th>
                 </tr>
             </thead>
             <tbody>
-                {vrsteVozila && vrsteVozila.map((vrsta,index)=>(
+                {vrsteOpreme && vrsteOpreme.map((vrsta,index)=>(
                     <tr key={index}>
                         <td>
                             {vrsta.vrsta}
@@ -70,7 +71,7 @@ export default function VrsteVozilaPregled(){
                         <td>
                             <Button variant="danger" onClick={()=>obrisi(vrsta.sifra)}>Ukloni</Button>
                             &nbsp;&nbsp;&nbsp;
-                            <Button onClick={()=>navigate(`/vrsteVozila/uredi/${vrsta.sifra}`)}>Uredi</Button>
+                            <Button onClick={()=>navigate(`/vrstaOpreme/uredi/${vrsta.sifra}`)}>Uredi</Button>
                         </td>
                     </tr>
                 ))}

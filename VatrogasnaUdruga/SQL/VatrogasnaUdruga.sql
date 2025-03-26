@@ -149,8 +149,8 @@ insert into oprema (naziv, vrstaOpremeSifra, datumKrajaValjanosti, datumProvjere
  
 
  insert into vatrogasac (ime, prezime, brojTelefona, godinaRodenja) values	
-('David', 'Nad','099-381-7991','1998'), 
-('Andreja', 'Nad','099-381-7992','1999'),
+('David', 'Nađ','099-381-7991','1998'), 
+('Andreja', 'Nađ','099-381-7992','1999'),
 ('Ivan', 'Horvat', '0911234567', '1990'),
 ('Petra', 'Kovacic', '0922345678', '1985'),
 ('Marko', 'Maric', '0953456789', '1995'),

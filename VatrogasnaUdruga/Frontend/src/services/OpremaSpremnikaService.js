@@ -20,8 +20,18 @@ async function brisanje(sifra){
     })
 }
 
-async function dodaj(vrsta){
-    return await HttpService.post('/OpremaSpremnika/dodaj/', vrsta)
+async function pronadiIUkloni(oprema) {
+    return await HttpService.delete('/OpremaSpremnika/ukloni', { data: oprema })
+        .then(() => {
+            return { greska: false, poruka: 'Obrisano' };
+        })
+        .catch(() => {
+            return { greska: true, poruka: 'Problem kod brisanja opreme spremnika' };
+        });
+}
+
+async function dodaj(oprema){
+    return await HttpService.post('/OpremaSpremnika/dodaj/', oprema)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })
@@ -75,4 +85,5 @@ export default {
     dodaj,
     getBySifra,
     promjena,
+    pronadiIUkloni
 }

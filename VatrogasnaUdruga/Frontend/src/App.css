@@ -89,3 +89,32 @@
 body {
   padding-top: 56px; /* Adjust based on your navbar height */
 }
+
+.react-datepicker-wrapper {
+  width: 100%; /* Makes it full width inside a Bootstrap Form.Group */
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+  height: 38px; /* Matches Bootstrap form controls */
+  padding: 6px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da; /* Bootstrap input border */
+  border-radius: 0.25rem;
+}
+
+.react-datepicker__year-dropdown {
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.react-datepicker__year-option {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.react-datepicker__year-option:hover {
+  background: #007bff;
+  color: white;
+}

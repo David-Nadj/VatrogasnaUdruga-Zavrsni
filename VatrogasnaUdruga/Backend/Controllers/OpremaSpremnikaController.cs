@@ -115,6 +115,22 @@ namespace VatrogasnaUdruga.Backend.Controllers
             return Ok(new { message = "Oprema uspješno uklonjena iz spremnika" });
         }
 
+        [HttpDelete]
+        [Route("ukloni")]
+        public IActionResult ObrisiOpremuUSpremniku([FromBody] OpremaSpremnikaDTO opremaSpremnika)
+        {
+            var pretraga = _context.OpremaSpremnikas.FirstOrDefault(v => opremaSpremnika.SifraSpremnika == v.SifraSpremnika && opremaSpremnika.SifraOpreme == v.SifraOpreme);
+
+            if(pretraga == null)
+            {
+                return NotFound(new { message = "Veza između spremnika i opreme nije pronađena" });
+            }
+            _context.OpremaSpremnikas.Remove(pretraga);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Oprema uspješno uklonjena iz spremnika" });
+        }
+
         [HttpPost]
         [Route("dodaj")]
         public IActionResult KreirajNovuVezuSpremnikaIOpreme([FromBody] OpremaSpremnikaDTO opremaSpremnika)

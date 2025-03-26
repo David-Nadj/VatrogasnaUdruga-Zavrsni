@@ -31,35 +31,35 @@ export default function NavBarEdunova(){
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Pregled vrste vozila</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Dodaj novu vrstu vozila</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VOZILA_SPREMNICI_OPREMA)}>Pregled opreme i spremnika vozila</NavDropdown.Item>
-
-
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Dodaj novu opremu vozilu</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Registriraj novi spremnik vozilu</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VOZILA_SPREMNIK_NOVO)}>Registriraj novi spremnik vozilu</NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Oprema" id="basic-nav-dropdown">
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Pregled opremu</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Dodaj novu opremu</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Pregled vrste opreme</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_VOZILA_NOVO)}>Dodaj novu vrstu opreme</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.OPREMA)}>Pregled opremu</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.OPREMA_NOVO)}>Dodaj novu opremu</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_OPREME)}>Pregled vrste opreme</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VRSTA_OPREME_NOVO)}>Dodaj novu vrstu opreme</NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Vatrogasci" id="basic-nav-dropdown">
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA)}>Pregled vatrogasce</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA)}>Dodaj novog vatrogasca</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASAC)}>Pregled vatrogasca</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASAC_NOVO)}>Dodaj novog vatrogasca</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA)}>Pregled opreme vatrogasca</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA)}>Dodaj opremu vatrogascu</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA_NOVO)}>Dodaj opremu vatrogascu</NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Skladišta" id="basic-nav-dropdown">
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTE)}>Pregled skladišta</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTE_NOVO)}>Dodaj novo skladište</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTA_OPREMA)}>Pregled opreme skladišta</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTA_OPREMA)}>Dodaj opremu skladištu</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTA_OPREMA)}>Pregled skladišta</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.SKLADISTA_OPREMA)}>Dodaj novo skladište</NavDropdown.Item>
           </NavDropdown>
-          </Nav>
 
-          
+          <NavDropdown title="Spremnik" id="basic-nav-dropdown">
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.SPREMNIK)}>Pregled spremnika</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.SPREMNIK_NOVO)}>Dodaj novi spremnik</NavDropdown.Item>
+          </NavDropdown>
+
+          </Nav>
         </Navbar.Collapse>
        </Container>
     </Navbar>

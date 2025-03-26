@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import VrstaVozilaService from "../../services/VrsteVozilaService"
+import VrsteOpremeService from "../../services/VrstaOpremeService"
 import { Button, Table } from "react-bootstrap";
 import { NumericFormat } from "react-number-format";
 import moment from "moment";
@@ -10,7 +10,7 @@ import useLoading from "../../hooks/useLoading";
 import useError from '../../hooks/useError';
 import { Form, Row, Col } from "react-bootstrap";
 
-export default function VrstaVozilaPregled(){
+export default function VrsteVozilaPregled(){
 
     const navigate = useNavigate()
     const { showLoading, hideLoading } = useLoading();
@@ -21,14 +21,14 @@ export default function VrstaVozilaPregled(){
 
   async function dodaj(e) {
     showLoading();
-    const odgovor = await VrstaVozilaService.dodaj(e);
+    const odgovor = await VrsteOpremeService.dodaj(e);
     hideLoading();
     if(odgovor.greska){
       prikaziError(odgovor.poruka);
       return;
     }
-    navigate(RouteNames.VRSTA_VOZILA);
-    setVrstaOpreme(odgovor.poruka[0].sifra);
+    navigate(RouteNames.VRSTA_OPREME);
+    setVrsteVozila(odgovor.poruka[0].sifra);
   }
 
   function obradiSubmit(e) {
@@ -43,7 +43,7 @@ export default function VrstaVozilaPregled(){
 
   return (
     <>
-    Dodavanje nove vrste vozila
+    Dodavanje nove vrste opreme
 
     <Form onSubmit={obradiSubmit}>
         <Form.Group controlId="vrsta">
@@ -54,14 +54,14 @@ export default function VrstaVozilaPregled(){
         <hr />
         <Row>
             <Col xs={6} sm={6} md={3} lg={6} xl={6} xxl={6}>
-            <Link to={RouteNames.VRSTA_VOZILA}
+            <Link to={RouteNames.OPREMA}
             className="btn btn-danger siroko">
             Odustani
             </Link>
             </Col>
             <Col xs={6} sm={6} md={9} lg={6} xl={6} xxl={6}>
             <Button variant="primary" type="submit" className="siroko">
-                Dodaj novu vrstu vozila
+                Dodaj novu vrstu opreme
             </Button>
             </Col>
         </Row>

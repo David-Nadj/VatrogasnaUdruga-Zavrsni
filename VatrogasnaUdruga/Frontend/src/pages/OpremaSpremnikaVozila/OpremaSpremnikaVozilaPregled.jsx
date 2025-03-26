@@ -8,12 +8,34 @@ import OpremaSpremnikaService from "../../services/OpremaSpremnikaService";
 import { Table, Button } from "react-bootstrap";
 import useLoading from "../../hooks/useLoading";
 import useError from "../../hooks/useError";
+import { RouteNames } from '../../constants';
+import { Link, useNavigate } from "react-router-dom";
 
 export default function VozilaPregled() {
   const { showLoading, hideLoading } = useLoading();
   const { prikaziError } = useError();
-
+  const navigate = useNavigate();
   const [vozila, setVozila] = useState([]);
+
+
+  function obrisi(sifraOpreme, sifraSpremnika, kolicina){
+    if(!confirm('Sigurno obrisati?')){
+        return;
+    }
+    brisanjeOpremeSpremnika({sifraOpreme, sifraSpremnika, kolicina})
+}
+
+async function brisanjeOpremeSpremnika(e) {
+    showLoading();
+    const odgovor = await OpremaSpremnikaService.pronadiIUkloni(e);
+    hideLoading();
+    if(odgovor.greska){
+        prikaziError(odgovor.poruka)
+        return
+    }
+    dohvatiPodatke();
+}
+
 
   async function dohvatiPodatke() {
     showLoading();
@@ -65,8 +87,7 @@ export default function VozilaPregled() {
             prikaziError(vrsteOpremeRes.poruka)
             return
         }
-        console.log(vrsteOpremeRes.poruka)
-            
+
         const podaci = vozilaRes.poruka.map((vozilo) => {
             const spremniciVozila = spremniciVozilaRes.poruka.filter(
             (sv) => sv.sifraVozila === vozilo.sifra
@@ -96,10 +117,8 @@ export default function VozilaPregled() {
             return { ...vozilo, spremnici: spremniciSaOpremom };
         });
     
-        console.log("Obrađeni podaci vozila:", podaci);
         setVozila(podaci);
     } catch (error) {
-        console.error("Greška pri dohvaćanju podataka:", error);
         prikaziError("Greška pri dohvaćanju podataka.");
     }
     hideLoading();
@@ -114,55 +133,59 @@ export default function VozilaPregled() {
       <h2>Vozila i njihova oprema</h2>
       {vozila.map((vozilo) => (
         <div key={vozilo.sifra} className="mb-4">
-          <h3 className="mb-4 text-danger">{vozilo.naziv} </h3>
+          <h2 className="mb-4 text-danger">{vozilo.naziv} </h2>
+          <Link to={`/spremnikVozila/dodaj/${vozilo.sifra}`}
+            className="btn btn-secondary siroko">Dodaj novi spremnik</Link>
           {vozilo.spremnici.length > 0 ? (
-            vozilo.spremnici.map((spremnik) => (
-              <div key={spremnik.sifra}>
-                <h4>{spremnik.naziv}</h4>
-                <Button variant="secondary">
-                    Dodaj novi spremnik
-                </Button>
-                <Table striped bordered>
-                  <thead>
-                    <tr>
-                      <th>Oprema</th>
-                      <th>Količina</th>
-                      <th>Vrsta opreme</th>
-                      <th>Detalji</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {spremnik.oprema.map((oprema) => (
+          vozilo.spremnici.map((spremnik) => (
+            <div key={spremnik.sifra}>
+              <h4>{spremnik.naziv}</h4>
+              <Table striped bordered>
+                <thead>
+                  <tr>
+                    <th>Oprema</th>
+                    <th>Količina</th>
+                    <th>Vrsta opreme</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {spremnik.oprema.length > 0 ? (
+                    spremnik.oprema.map((oprema) => (
                       <tr key={oprema.sifra}>
                         <td>{oprema.naziv}</td>
-                        <td>{oprema.kolicina}</td> 
-                        <td>{oprema.vrstaOpremeNaziv}</td> 
-                        <td>{oprema.opis}</td>
+                        <td>{oprema.kolicina}</td>
+                        <td>{oprema.vrstaOpremeNaziv}</td>
                         <td>
-                            <Button variant="primary" className="mr-3">
-                                Uredi opremu
-                            </Button>
-                            <Button variant="danger">
-                                Obrisi opremu
-                            </Button>
+                          <Button variant="primary" onClick={() => navigate(`/oprema/uredi/${oprema.sifra}`)}>
+                            Uredi opremu
+                          </Button>
+                          <Button variant="danger" onClick={() => obrisi(oprema.sifra, spremnik.sifra, oprema.kolicina)}>Obrisi opremu</Button>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                <div className="d-flex justify-content-start">
-                  <Button variant="success" className="mr-2">
-                      Dodaj opremu
-                  </Button>
-                  <Button variant="secondary">
-                      Uredi spremnik
-                  </Button>
-                </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        Nema opreme u spremniku.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+              <div className="d-flex justify-content-start">
+                <Button variant="success" className="ml-3" onClick={() => navigate(`/opremaSpremnikaVozila/dodajOpremu/${spremnik.sifra}`)}>
+                  Dodaj opremu
+                 </Button>
+                <Button variant="secondary" className="mr-2" onClick={() => navigate(`/spremnik/uredi/${spremnik.sifra}`)}>
+                  Uredi spremnik
+                </Button>
               </div>
-            ))
+            </div>
+          ))
           ) : (
-            <p>Nema spremnika za ovo vozilo.</p>
+          <p>Nema spremnika za ovo vozilo.</p>
           )}
+
         </div>
       ))}
     </div>
