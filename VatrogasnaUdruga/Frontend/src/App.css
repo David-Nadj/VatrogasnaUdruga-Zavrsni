@@ -74,3 +74,18 @@
   align-items: center;
   justify-content: center;
 }
+
+/* In your CSS file (e.g., App.css) */
+.navbar {
+  position: fixed; /* Locks navbar at the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensures it stays above other content */
+  width: 100%;
+}
+
+/* Prevents content from hiding behind the fixed navbar */
+body {
+  padding-top: 56px; /* Adjust based on your navbar height */
+}

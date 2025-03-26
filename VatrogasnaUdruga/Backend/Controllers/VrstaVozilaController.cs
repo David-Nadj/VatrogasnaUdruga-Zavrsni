@@ -96,7 +96,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
         [Route("uredi/{sifra:int}")]
         public IActionResult UrediVrstuVozilo(int sifra, [FromBody] VrsteVozilaDTO uredenaVrstaVozilo)
         {
-            var vrstaVozila = _context.VrstaVozilas.FirstOrDefault(v => v.Sifra == sifra);
+            var vrstaVozila = _context.VrstaVozilas.Find(sifra);
             if (vrstaVozila == null)
             {
                 return NotFound(new { message = "Vozilo nije pronađeno" });

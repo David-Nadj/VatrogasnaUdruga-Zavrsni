@@ -9,5 +9,6 @@
         public DateOnly? DatumProvjereValjanosti { get; set; }
 
         public DateOnly? DatumKrajaValjanosti { get; set; }
+        public int VrstaOpremeSifra { get; set; }
     }
 }

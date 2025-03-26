@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -19,21 +20,11 @@ namespace VatrogasnaUdruga.Backend.Controllers
         [HttpGet]
         public IActionResult DohvatiSvuOpremu()
         {
-            var all = _context.OpremaSkladistas
-                .Select(v => new
-                {
-                    Skladiste = _context.Skladistes
-                                .Where(o => o.Sifra == v.SifraSkladista)
-                                .Select(o => o.Naziv)
-                                .FirstOrDefault(),
-                    Oprema = _context.Opremas
-                                .Where(o => o.Sifra == v.SifraOpreme)
-                                .Select(o => o.Naziv)
-                                .FirstOrDefault(),
-                    KolicinaOpreme = v.Kolicina
-                })
-                .ToList();
-            return Ok(all);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return new JsonResult(_context.OpremaSkladistas);
         }
 
         [HttpGet]
@@ -125,51 +116,84 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
 
-
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult DodajOpremuUSkladiste(String nazivSkladista,String nazivOpreme,int kolicina)
+        public IActionResult KreirajNovuVezuSkladistaIOpreme([FromBody] OpremaSkladistaDTO opremaSkladista)
         {
-            if (kolicina < 1)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (opremaSkladista.Kolicina < 1)
             {
                 return BadRequest(new { message = "Količina ne može biti manja od 1." });
             }
-            var skladiste = _context.Skladistes
-                .Where(f => f.Naziv.Contains(nazivSkladista))
-                .FirstOrDefault();
 
-            if (skladiste == null)
-            {
-                return NotFound(new { message = "Skladište nije pronađeno" });
-            }
-            int sifraSkladista = skladiste.Sifra;
-
-            var oprema = _context.Opremas
-                .Where(f => f.Naziv.Contains(nazivOpreme))
-                .FirstOrDefault();
+            var oprema = _context.Opremas.Find(opremaSkladista.SifraOpreme);
 
             if (oprema == null)
             {
-                return NotFound(new { message = "Oprema nije pronađena" });
+                return NotFound(new { message = "Sifra opreme nije pronađena" });
             }
-            int sifraOpreme = oprema.Sifra;
 
-            var novaVeza = new OpremaSkladista
+            var spremnik = _context.Skladistes.Find(opremaSkladista.SifraSkladista);
+
+            if (spremnik == null)
             {
-                SifraSkladista = sifraSkladista,
-                SifraOpreme = sifraOpreme,
-                Kolicina = kolicina
+                return NotFound(new { message = "Sifra skladista nije pronađena" });
+            }
+
+            var novo = new OpremaSkladista
+            {
+                SifraSkladista = opremaSkladista.SifraSkladista,
+                SifraOpreme = opremaSkladista.SifraOpreme,
+                Kolicina = opremaSkladista.Kolicina
             };
 
-            if (novaVeza == null)
-            {
-                return NoContent();
-            }
-
-            _context.OpremaSkladistas.Add(novaVeza);
+            _context.OpremaSkladistas.Add(novo);
             _context.SaveChanges();
 
-            return StatusCode(StatusCodes.Status201Created, novaVeza);
+            return StatusCode(StatusCodes.Status201Created, novo);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVezuSkladistaIOpreme(int sifra, [FromBody] OpremaSkladistaDTO uredenaOpremaSkladista)
+        {
+            var opremaSkladista = _context.OpremaSkladistas.Find(sifra);
+            if (opremaSkladista == null)
+            {
+                return NotFound(new { message = "Veza operem i spremnika nije pronađeno" });
+            }
+
+            if (uredenaOpremaSkladista.Kolicina < 1)
+            {
+                return BadRequest(new { message = "Količina ne može biti manja od 1." });
+            }
+
+            var oprema = _context.Opremas.Find(uredenaOpremaSkladista.SifraOpreme);
+
+            if (oprema == null)
+            {
+                return NotFound(new { message = "Sifra opreme nije pronađena" });
+            }
+
+            var spremnik = _context.Skladistes.Find(uredenaOpremaSkladista.SifraSkladista);
+
+            if (spremnik == null)
+            {
+                return NotFound(new { message = "Sifra skladista nije pronađena" });
+            }
+
+            opremaSkladista.SifraSkladista = uredenaOpremaSkladista.SifraSkladista;
+            opremaSkladista.SifraOpreme = uredenaOpremaSkladista.SifraOpreme;
+            opremaSkladista.Kolicina = uredenaOpremaSkladista.Kolicina;
+
+            _context.OpremaSkladistas.Update(opremaSkladista);
+            _context.SaveChanges();
+
+            return Ok(opremaSkladista);
         }
     }
 }

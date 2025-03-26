@@ -79,7 +79,7 @@ export default function VozilaDodaj() {
           </Form.Group>
 
           <Form.Group controlId="registracija">
-              <Form.Label>Registracija</Form.Label>
+              <Form.Label>Registracija vozila</Form.Label>
               <Form.Control type="text" name="registracija" required />
           </Form.Group>
 
@@ -89,6 +89,8 @@ export default function VozilaDodaj() {
                 selected={savedDatumProizvodnje}
                 onChange={date => setDatumProizvodnje(date)}
                 dateFormat="yyyy-MM-dd"
+                className="form-control"
+                wrapperClassName="w-100"
             />
             </Form.Group>
 
@@ -98,6 +100,8 @@ export default function VozilaDodaj() {
                 selected={savedDatumZadnjeRegistracije}
                 onChange={date => setDatumZadnjeRegistracije(date)}
                 dateFormat="yyyy-MM-dd"
+                className="form-control"
+                wrapperClassName="w-100"
             />
           </Form.Group>
 

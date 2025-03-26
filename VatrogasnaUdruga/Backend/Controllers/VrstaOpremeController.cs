@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -66,15 +67,18 @@ namespace VatrogasnaUdruga.Backend.Controllers
             return Ok(new { message = "Vrsta opreme uspješno obrisana" });
         }
 
-
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNovuVrstuOpreme(String vrsta)
+        public IActionResult KreirajNovuVrstuOpreme([FromBody] VrstaOpremeDTO vrsta)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var novaVrsta = new VrstaOpreme
             {
-                Vrsta = vrsta,
-
+                Vrsta = vrsta.Vrsta
             };
 
             if (novaVrsta == null)
@@ -89,10 +93,10 @@ namespace VatrogasnaUdruga.Backend.Controllers
         }
 
         [HttpPut]
-        [Route("uredi")]
-        public IActionResult UrediVozilo(int sifra, String vrstaVozila)
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVrstuOpreme(int sifra, [FromBody] VrstaOpremeDTO uredenaVrstaOpreme)
         {
-            var vrsta = _context.VrstaVozilas.FirstOrDefault(v => v.Sifra == sifra);
+            var vrsta = _context.VrstaOpremes.Find(sifra);
             if (vrsta == null)
             {
                 return NotFound(new { message = "Vrsta nije pronađeno" });
@@ -100,9 +104,9 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
             int sifraVrste = vrsta.Sifra;
 
-            vrsta.Vrsta = vrstaVozila;
+            vrsta.Vrsta = uredenaVrstaOpreme.Vrsta;
 
-            _context.VrstaVozilas.Update(vrsta);
+            _context.VrstaOpremes.Update(vrsta);
             _context.SaveChanges();
 
             return Ok(vrsta);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -80,23 +81,40 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNoviSpremnik(String naziv)
+        public IActionResult KreirajNoviSpremnik([FromBody] Spremnik spremnik)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var noviSpremnik = new Spremnik
             {
-                Naziv = naziv
-           
+                Naziv = spremnik.Naziv
             };
-
-            if (noviSpremnik == null)
-            {
-                return NoContent();
-            }
 
             _context.Spremniks.Add(noviSpremnik);
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, noviSpremnik);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediSpremnik(int sifra, [FromBody] Spremnik uredeniSpremnik)
+        {
+            var spremnik = _context.Spremniks.Find(sifra);
+            if (spremnik == null)
+            {
+                return NotFound(new { message = "Spremnik nije pronađeno" });
+            }
+
+            spremnik.Naziv = uredeniSpremnik.Naziv;
+
+            _context.Spremniks.Update(spremnik);
+            _context.SaveChanges();
+
+            return Ok(spremnik);
         }
     }
 }

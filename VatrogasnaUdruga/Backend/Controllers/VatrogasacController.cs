@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -81,25 +82,46 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNovogVatrogasca(String ime, String prezime, String brojTelefona, int? godinaRodenja)
+        public IActionResult KreirajNovogVatrogasca([FromBody] Vatrogasac vatrogasac)
         {
-            var noviVatrogasac = new Vatrogasac
+            if (!ModelState.IsValid)
             {
-                Ime = ime,
-                Prezime = prezime,
-                BrojTelefona = brojTelefona,
-                GodinaRodenja= godinaRodenja
-            };
-
-            if (noviVatrogasac == null)
-            {
-                return NoContent();
+                return BadRequest(ModelState);
             }
 
-            _context.Vatrogasacs.Add(noviVatrogasac);
+            var novoVatrogasac = new Vatrogasac
+            {
+                Ime = vatrogasac.Ime,
+                Prezime = vatrogasac.Prezime,
+                BrojTelefona = vatrogasac.BrojTelefona,
+                GodinaRodenja = vatrogasac.GodinaRodenja
+            };
+
+            _context.Vatrogasacs.Add(novoVatrogasac);
             _context.SaveChanges();
 
-            return StatusCode(StatusCodes.Status201Created, noviVatrogasac);
+            return StatusCode(StatusCodes.Status201Created, novoVatrogasac);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVatrogasca(int sifra, [FromBody] Vatrogasac uredeniVatrogasac)
+        {
+            var vatrogasac = _context.Vatrogasacs.Find(sifra);
+            if (vatrogasac == null)
+            {
+                return NotFound(new { message = "Vozilo nije pronađeno" });
+            }
+
+            vatrogasac.Ime = uredeniVatrogasac.Ime;
+            vatrogasac.Prezime = uredeniVatrogasac.Prezime;
+            vatrogasac.BrojTelefona = uredeniVatrogasac.BrojTelefona;
+            vatrogasac.GodinaRodenja = uredeniVatrogasac.GodinaRodenja;
+
+            _context.Vatrogasacs.Update(vatrogasac);
+            _context.SaveChanges();
+
+            return Ok(vatrogasac);
         }
     }
 }

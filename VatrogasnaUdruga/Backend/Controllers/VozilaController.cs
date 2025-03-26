@@ -90,8 +90,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vrsta = _context.VrstaVozilas
-                .FirstOrDefault(f => f.Sifra == vozilo.VrstaVozilaSifra);
+            var vrsta = _context.VrstaVozilas.Find(vozilo.VrstaVozilaSifra);
 
             if (vrsta == null)
             {
@@ -118,13 +117,13 @@ namespace VatrogasnaUdruga.Backend.Controllers
         [Route("uredi/{sifra:int}")]
         public IActionResult UrediVozilo(int sifra, [FromBody] VozilaDTO uredenoVozilo)
         {
-            var vozilo = _context.Vozilas.FirstOrDefault(v => v.Sifra == sifra);
+            var vozilo = _context.Vozilas.Find(sifra);
             if (vozilo == null)
             {
                 return NotFound(new { message = "Vozilo nije pronađeno" });
             }
 
-            var vrsta = _context.VrstaVozilas.FirstOrDefault(f => f.Sifra == (uredenoVozilo.VrstaVozilaSifra));
+            var vrsta = _context.VrstaVozilas.Find(uredenoVozilo.VrstaVozilaSifra);
             if (vrsta == null)
             {
                 return NotFound(new { message = "Vrsta vozila nije pronađena" });

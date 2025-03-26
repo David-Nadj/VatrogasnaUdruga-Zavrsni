@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -78,26 +79,44 @@ namespace VatrogasnaUdruga.Backend.Controllers
             return Ok(new { message = "Skladište uspješno obrisano" });
         }
 
-
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNovoSkladiste(String naziv, String? adresa)
+        public IActionResult KreirajNovoSkladiste([FromBody] Skladiste skladiste)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var novoSkladiste = new Skladiste
             {
-                Naziv = naziv,
-                Adresa = adresa
+                Naziv = skladiste.Naziv,
+                Adresa = skladiste.Adresa
             };
-
-            if (novoSkladiste== null)
-            {
-                return NoContent();
-            }
 
             _context.Skladistes.Add(novoSkladiste);
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novoSkladiste);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVozilo(int sifra, [FromBody] Skladiste uredenoSkladiste)
+        {
+            var skladiste = _context.Skladistes.Find(sifra);
+            if (skladiste == null)
+            {
+                return NotFound(new { message = "Skladiste nije pronađeno" });
+            }
+
+            skladiste.Naziv = uredenoSkladiste.Naziv;
+            skladiste.Adresa = uredenoSkladiste.Adresa;
+
+            _context.Skladistes.Update(skladiste);
+            _context.SaveChanges();
+
+            return Ok(skladiste);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -19,20 +20,11 @@ namespace VatrogasnaUdruga.Backend.Controllers
         [HttpGet]
         public IActionResult DohvatiSveSpremnikeVozila()
         {
-            var all = _context.SpremnikVozilas
-                .Select(v => new
-                {
-                    Spremnik = _context.Spremniks
-                                .Where(o => o.Sifra == v.SifraSpremnika)
-                                .Select(o => o.Naziv)
-                                .FirstOrDefault(),
-                    Vozilo = _context.Vozilas
-                                .Where(o => o.Sifra == v.SifraVozila)
-                                .Select(o => o.Naziv)
-                                .FirstOrDefault(),
-                })
-                .ToList();
-            return Ok(all);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return new JsonResult(_context.SpremnikVozilas);
         }
 
         [HttpGet]
@@ -123,49 +115,44 @@ namespace VatrogasnaUdruga.Backend.Controllers
             return Ok(new { message = "Spremnik Vozila je uspješno uklonjena iz vozila" });
         }
 
-
-
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult DodajSpremnikUVozilo(String nazivSpremnika, String nazivVozila)
+        public IActionResult KreirajNovuVezuSpremnikaIVozila([FromBody] SpremnikVozilaDTO novaVezaSpremnikaVozila)
         {
-            var spremnik = _context.Spremniks
-                .Where(f => f.Naziv.Contains(nazivSpremnika))
-               .FirstOrDefault();
-
-            if (spremnik == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound(new { message = "Spremnik nije pronađen" });
+                return BadRequest(ModelState);
             }
-
-            int sifraSpremnika = spremnik.Sifra;
-
-            var vozilo = _context.Vozilas
-                .Where(f => f.Naziv.Contains(nazivVozila))
-                .FirstOrDefault();
-
-            if (vozilo == null)
-            {
-                return NotFound(new { message = "Vozilo nije pronađen" });
-            }
-
-            int sifraVozila = vozilo.Sifra;
 
             var novaVeza = new SpremnikVozila
             {
-                SifraSpremnika = sifraSpremnika,
-                SifraVozila = sifraVozila
+                SifraSpremnika = novaVezaSpremnikaVozila.SifraSpremnika,
+                SifraVozila = novaVezaSpremnikaVozila.SifraVozila
             };
-
-            if (novaVeza == null)
-            {
-                return NoContent();
-            }
 
             _context.SpremnikVozilas.Add(novaVeza);
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novaVeza);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediVezuSpremnikaVozila(int sifra, [FromBody] SpremnikVozilaDTO uredenaVezaSpremnikaVozila)
+        {
+            var spremnikVozila = _context.SpremnikVozilas.Find(sifra);
+            if (spremnikVozila == null)
+            {
+                return NotFound(new { message = "Veza spremnika i vozila nije pronađena" });
+            }
+
+            spremnikVozila.SifraSpremnika = uredenaVezaSpremnikaVozila.SifraSpremnika;
+            spremnikVozila.SifraVozila = uredenaVezaSpremnikaVozila.SifraVozila;
+
+            _context.SpremnikVozilas.Update(spremnikVozila);
+            _context.SaveChanges();
+
+            return Ok(spremnikVozila);
         }
     }
 }

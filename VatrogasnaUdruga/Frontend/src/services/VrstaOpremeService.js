@@ -1,7 +1,7 @@
 import { HttpService } from "./HttpService";
 
 async function get(){
-    return await HttpService.get('/VrstaOprema')
+    return await HttpService.get('/VrstaOpreme')
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })
@@ -11,7 +11,7 @@ async function get(){
 }
 
 async function brisanje(sifra){
-    return await HttpService.delete('/VrstaOprema/' + sifra)
+    return await HttpService.delete('/VrstaOpreme/' + sifra)
     .then(()=>{
         return {greska: false, poruka: 'Obrisano'}
     })
@@ -21,7 +21,7 @@ async function brisanje(sifra){
 }
 
 async function dodaj(vrsta){
-    return await HttpService.post('/VrstaOprema/dodaj/', vrsta)
+    return await HttpService.post('/VrstaOpreme/dodaj/', vrsta)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })
@@ -40,7 +40,7 @@ async function dodaj(vrsta){
 }
 
 async function promjena(sifra,smjer){
-    return await HttpService.put('/VrstaOprema/uredi/' + sifra,smjer)
+    return await HttpService.put('/VrstaOpreme/uredi/' + sifra,smjer)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })
@@ -60,7 +60,7 @@ async function promjena(sifra,smjer){
 }
 
 async function getBySifra(sifra){
-    return await HttpService.get('/VrstaOprema/'+sifra)
+    return await HttpService.get('/VrstaOpreme/'+sifra)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
     })

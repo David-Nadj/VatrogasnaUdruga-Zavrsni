@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VatrogasnaUdruga.Backend.Data;
+using VatrogasnaUdruga.Backend.DTO;
 using VatrogasnaUdruga.Backend.Models;
 
 namespace VatrogasnaUdruga.Backend.Controllers
@@ -80,26 +81,61 @@ namespace VatrogasnaUdruga.Backend.Controllers
 
         [HttpPost]
         [Route("dodaj")]
-        public IActionResult KreirajNovuOpremu(String naziv, String? opis, DateOnly? datumProvjereValjanosti, DateOnly? datumKrajaValjanosti,int vrstaOpremeSifra)
+        public IActionResult KreirajNovuOpremu([FromBody] OpremaDTO oprema)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var vrsta = _context.VrstaOpremes.Find(oprema.VrstaOpremeSifra);
+
+            if (vrsta == null)
+            {
+                return NotFound(new { message = "Vrsta opreme nije pronađena" });
+            }
+
             var novaOprema = new Oprema
             {
-                Naziv = naziv,
-                Opis = opis,
-                DatumProvjereValjanosti = datumProvjereValjanosti, 
-                DatumKrajaValjanosti = datumKrajaValjanosti,
-                VrstaOpremeSifra = vrstaOpremeSifra // Only the foreign key
+                Naziv = oprema.Naziv,
+                Opis = oprema.Opis,
+                DatumProvjereValjanosti = oprema.DatumProvjereValjanosti,
+                DatumKrajaValjanosti = oprema.DatumKrajaValjanosti,
+                VrstaOpremeSifra = oprema.VrstaOpremeSifra,
             };
-
-            if (novaOprema == null)
-            {
-                return NoContent();
-            }
 
             _context.Opremas.Add(novaOprema);
             _context.SaveChanges();
 
             return StatusCode(StatusCodes.Status201Created, novaOprema);
+        }
+
+        [HttpPut]
+        [Route("uredi/{sifra:int}")]
+        public IActionResult UrediOpremu(int sifra, [FromBody] OpremaDTO uredenaOprema)
+        {
+            var oprema = _context.Opremas.Find(sifra);
+            if (oprema == null)
+            {
+                return NotFound(new { message = "Vozilo nije pronađeno" });
+            }
+
+            var vrsta = _context.VrstaOpremes.Find(uredenaOprema.VrstaOpremeSifra);
+            if (vrsta == null)
+            {
+                return NotFound(new { message = "Vrsta opreme nije pronađena" });
+            }
+
+            oprema.Naziv = uredenaOprema.Naziv;
+            oprema.Opis = uredenaOprema.Opis;
+            oprema.DatumProvjereValjanosti = uredenaOprema.DatumProvjereValjanosti;
+            oprema.DatumKrajaValjanosti = uredenaOprema.DatumKrajaValjanosti;
+            oprema.VrstaOpremeSifra = uredenaOprema.VrstaOpremeSifra;
+
+            _context.Opremas.Update(oprema);
+            _context.SaveChanges();
+
+            return Ok(oprema);
         }
     }
 }
