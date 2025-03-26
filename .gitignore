@@ -398,6 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 VatrogasnaUdruga/.vs
-VatrogasnaUdruga/appsettings.json
 VatrogasnaUdruga/obj
 VatrogasnaUdruga/bin
+VatrogasnaUdruga/appsettings.json
