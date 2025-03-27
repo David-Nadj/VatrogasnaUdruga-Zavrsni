@@ -45,13 +45,10 @@ export const RouteNames={
 
     VRSTA_OPREME: '/vrstaOpreme',
     VRSTA_OPREME_NOVO: '/vrstaOpreme/dodaj/',
-    VRSTA_OPREME_UREDI: '/vrstaOpreme/uredi/:sifra'
+    VRSTA_OPREME_UREDI: '/vrstaOpreme/uredi/:sifra',
 
-
-
-
-
-
+    OPREMA_SKLADISTA_NOVO: '/opremaSkladista/dodajOpremu/:sifra',
+    OPREMA_VATROGASCA_NOVO: '/opremaVatrogasca/dodajOpremu/:sifra'
 
 }
 

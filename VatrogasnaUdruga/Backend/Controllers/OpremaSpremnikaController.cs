@@ -159,46 +159,49 @@ namespace VatrogasnaUdruga.Backend.Controllers
                 return NotFound(new { message = "Sifra spremnika nije pronađena" });
             }
 
-            var novo = new OpremaSpremnika
+            var postojece = _context.OpremaSpremnikas.
+                    FirstOrDefault(os => os.SifraOpreme == opremaSpremnika.SifraOpreme && os.SifraSpremnika == opremaSpremnika.SifraSpremnika);
+
+            if (postojece != null)
             {
-                SifraSpremnika = opremaSpremnika.SifraSpremnika,
-                SifraOpreme = opremaSpremnika.SifraOpreme,
-                Kolicina = opremaSpremnika.Kolicina
-            };
+                postojece.Kolicina += opremaSpremnika.Kolicina;
 
-            _context.OpremaSpremnikas.Add(novo);
-            _context.SaveChanges();
+                _context.OpremaSpremnikas.Update(postojece);
+                _context.SaveChanges();
 
-            return StatusCode(StatusCodes.Status201Created, novo);
+                return StatusCode(StatusCodes.Status201Created, postojece);
+            }
+            else
+            {
+                var novo = new OpremaSpremnika
+                {
+                    SifraSpremnika = opremaSpremnika.SifraSpremnika,
+                    SifraOpreme = opremaSpremnika.SifraOpreme,
+                    Kolicina = opremaSpremnika.Kolicina
+                };
+
+                _context.OpremaSpremnikas.Add(novo);
+                _context.SaveChanges();
+
+                return StatusCode(StatusCodes.Status201Created, novo);
+            }
         }
 
         [HttpPut]
-        [Route("uredi/{sifra:int}")]
-        public IActionResult UrediVezuSpremnikaIOpreme(int sifra, [FromBody] OpremaSpremnikaDTO uredenaOpremaSpremnika)
+        [Route("urediVezu")]
+        public IActionResult UrediVezuSpremnikaIOpreme([FromBody] OpremaSpremnikaDTO uredenaOpremaSpremnika)
         {
-            var opremaSpremnika = _context.OpremaSpremnikas.Find(sifra);
+            var opremaSpremnika = _context.OpremaSpremnikas
+                .FirstOrDefault(os => os.SifraOpreme == uredenaOpremaSpremnika.SifraOpreme && os.SifraSpremnika == uredenaOpremaSpremnika.SifraSpremnika);
+            
             if (opremaSpremnika == null)
             {
-                return NotFound(new { message = "Veza operem i spremnika nije pronađeno" });
+                return NotFound(new { message = "Veza opreme i spremnika nije pronađeno" });
             }
 
             if (uredenaOpremaSpremnika.Kolicina < 1)
             {
                 return BadRequest(new { message = "Količina ne može biti manja od 1." });
-            }
-
-            var oprema = _context.Opremas.Find(uredenaOpremaSpremnika.SifraOpreme);
-
-            if (oprema == null)
-            {
-                return NotFound(new { message = "Sifra opreme nije pronađena" });
-            }
-
-            var spremnik = _context.Spremniks.Find(uredenaOpremaSpremnika.SifraSpremnika);
-
-            if (spremnik == null)
-            {
-                return NotFound(new { message = "Sifra spremnika nije pronađena" });
             }
 
             opremaSpremnika.SifraSpremnika = uredenaOpremaSpremnika.SifraSpremnika;

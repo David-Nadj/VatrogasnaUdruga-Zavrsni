@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import OpremaService from "../../services/OpremaService";
-import SpremnikService from "../../services/SpremnikService";
+import VatrogasacService from "../../services/VatrogasacService";
 import { Button, Form } from "react-bootstrap";
 import useLoading from "../../hooks/useLoading";
 import useError from "../../hooks/useError";
-import OpremaSpremnikaService from "../../services/OpremaSpremnikaService";
+import OpremaVatrogascaService from "../../services/OpremaVatrogascaService";
 
 export default function DodajOpremu() {
   const { sifra } = useParams(); 
@@ -13,23 +13,23 @@ export default function DodajOpremu() {
   const { prikaziError } = useError();
   const navigate = useNavigate();
   
-  const [spremnici, setSpremnici] = useState([]);
+  const [vatrogasci, setVatrogasci] = useState([]);
   const [oprema, setOprema] = useState([]);
-  const [sifraSpremnika, setSelectedSpremnik] = useState(sifra);
+  const [sifraVatrogasca, setSelectedVatrogasac] = useState(sifra);
   const [sifraOpreme, setSelectedOprema] = useState('');
   const [kolicina, setKolicina] = useState(0);
 
   async function dohvatiPodatke() {
     showLoading();
     try {
-      const spremniciRes = await SpremnikService.get();
+      const vatrogasciRes = await VatrogasacService.get();
       const opremaRes = await OpremaService.get();
       hideLoading();
-      if (spremniciRes.greska || opremaRes.greska) {
+      if (vatrogasciRes.greska || opremaRes.greska) {
         prikaziError("Greška pri dohvaćanju podataka.");
         return;
       }
-      setSpremnici(spremniciRes.poruka);
+      setVatrogasci(vatrogasciRes.poruka);
       setOprema(opremaRes.poruka);
     } catch (error) {
       prikaziError("Greška pri dohvaćanju podataka.");
@@ -45,14 +45,24 @@ export default function DodajOpremu() {
     e.preventDefault();
 
     if (sifraOpreme && kolicina > 0) {
+      showLoading();
       try {
-        const response = await OpremaSpremnikaService.dodaj({sifraSpremnika, sifraOpreme, kolicina});
+        const payload = {
+          sifraVatrogasca: parseInt(sifraVatrogasca),
+          sifraOpreme: parseInt(sifraOpreme),
+          kolicina: parseInt(kolicina)
+        };
+        
+        const response = await OpremaVatrogascaService.dodaj(payload);
+        hideLoading();
+        
         if (response.greska) {
           prikaziError(response.poruka);
         } else {
           navigate(-1);
         }
       } catch (error) {
+        hideLoading();
         prikaziError("Greška pri dodavanju opreme.");
       }
     } else {
@@ -62,14 +72,18 @@ export default function DodajOpremu() {
 
   return (
     <div>
-      <h2>Dodaj opremu u spremnik</h2>
+      <h2>Dodaj opremu vatrogascu</h2>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="sifraSpremnika">
-          <Form.Label>Spremnik</Form.Label>
-          <Form.Control as="select" value={sifraSpremnika} onChange={(e) => setSelectedSpremnik(e.target.value)}>
-            {spremnici.map((spremnik) => (
-              <option key={spremnik.sifra} value={spremnik.sifra}>
-                {spremnik.naziv}
+        <Form.Group controlId="sifraVatrogasca">
+          <Form.Label>Vatrogasac</Form.Label>
+          <Form.Control 
+            as="select" 
+            value={sifraVatrogasca} 
+            onChange={(e) => setSelectedVatrogasac(e.target.value)}
+          >
+            {vatrogasci.map((vatrogasac) => (
+              <option key={vatrogasac.sifra} value={vatrogasac.sifra}>
+                {vatrogasac.ime} {vatrogasac.prezime}
               </option>
             ))}
           </Form.Control>
@@ -77,7 +91,11 @@ export default function DodajOpremu() {
 
         <Form.Group controlId="sifraOpreme">
           <Form.Label>Oprema</Form.Label>
-          <Form.Control as="select" value={sifraOpreme} onChange={(e) => setSelectedOprema(e.target.value)}>
+          <Form.Control 
+            as="select" 
+            value={sifraOpreme} 
+            onChange={(e) => setSelectedOprema(e.target.value)}
+          >
             <option value="">Odaberite opremu</option>
             {oprema.map((item) => (
               <option key={item.sifra} value={item.sifra}>
@@ -93,10 +111,9 @@ export default function DodajOpremu() {
             type="number"
             min="1"
             value={kolicina}
-            onChange={(e) => setKolicina(e.target.value)}
+            onChange={(e) => setKolicina(parseInt(e.target.value) || 0)}
           />
         </Form.Group>
-
         <Button variant="success" type="submit">
           Dodaj opremu
         </Button>

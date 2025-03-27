@@ -32,13 +32,6 @@ export default function SpremnikPregled(){
        dohvatiSpremnik();
     },[])
 
-    function formatirajDatum(datum){
-        if(datum==null){
-            return 'Nije definirano';
-        }
-        return moment.utc(datum).format('DD.MM.YYYY.')
-    }
-
     function obrisi(sifra){
         if(!confirm('Sigurno obrisati?')){
             return;
@@ -46,9 +39,9 @@ export default function SpremnikPregled(){
         brisanjeSpremnika(sifra)
     }
 
-    async function brisanjeSpremnika(sifra) {
+    async function brisanjeSpremnika(sifraSpremnika) {
         showLoading();
-        const odgovor = await SpremnikService.brisanje(sifra);
+        const odgovor = await SpremnikService.brisanje(sifraSpremnika);
         hideLoading();
         if(odgovor.greska){
             prikaziError(odgovor.poruka)

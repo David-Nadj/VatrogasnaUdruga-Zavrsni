@@ -23,7 +23,7 @@ export default function NavBarEdunova(){
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={()=>navigate(RouteNames.VRSTA_VOZILA)}>Početna</Nav.Link>
+            <Nav.Link onClick={()=>navigate(RouteNames.HOME)}>Početna</Nav.Link>
 
             <NavDropdown title="Vozila" id="basic-nav-dropdown">
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VOZILA)}>Pregled vozila</NavDropdown.Item>
@@ -45,7 +45,7 @@ export default function NavBarEdunova(){
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASAC)}>Pregled vatrogasca</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASAC_NOVO)}>Dodaj novog vatrogasca</NavDropdown.Item>
             <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA)}>Pregled opreme vatrogasca</NavDropdown.Item>
-            <NavDropdown.Item onClick={()=>navigate(RouteNames.VATROGASCI_OPREMA_NOVO)}>Dodaj opremu vatrogascu</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>navigate(RouteNames.OPREMA_VATROGASCA_NOVO)}>Dodaj opremu vatrogascu</NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Skladišta" id="basic-nav-dropdown">

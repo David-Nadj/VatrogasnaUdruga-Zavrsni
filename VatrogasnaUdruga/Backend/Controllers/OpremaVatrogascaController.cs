@@ -152,23 +152,41 @@ namespace VatrogasnaUdruga.Backend.Controllers
                 return NotFound(new { message = "Sifra vatrogasca nije pronađena" });
             }
 
-            var novo = new OpremaVatrogasca
+            var postojece = _context.OpremaVatrogascas.
+                FirstOrDefault(os => os.SifraOpreme == opremaVatrogasca.SifraOpreme && os.SifraVatrogasca == opremaVatrogasca.SifraVatrogasca);
+        
+            if (postojece != null)
             {
-                SifraOpreme = opremaVatrogasca.SifraOpreme,
-                SifraVatrogasca = opremaVatrogasca.SifraVatrogasca
-            };
+                postojece.Kolicina += opremaVatrogasca.Kolicina;
 
-            _context.OpremaVatrogascas.Add(novo);
-            _context.SaveChanges();
+                _context.OpremaVatrogascas.Update(postojece);
+                _context.SaveChanges();
 
-            return StatusCode(StatusCodes.Status201Created, novo);
+                return StatusCode(StatusCodes.Status201Created, postojece);
+            }
+            else
+            {
+                var novo = new OpremaVatrogasca
+                {
+                    SifraOpreme = opremaVatrogasca.SifraOpreme,
+                    SifraVatrogasca = opremaVatrogasca.SifraVatrogasca,
+                    Kolicina = opremaVatrogasca.Kolicina
+                };
+
+                _context.OpremaVatrogascas.Add(novo);
+                _context.SaveChanges();
+
+                return StatusCode(StatusCodes.Status201Created, novo);
+            }
         }
 
         [HttpPut]
-        [Route("uredi/{sifra:int}")]
-        public IActionResult UrediVezuVatrogascaIOpreme(int sifra, [FromBody] OpremaVatrogscaDTO uredeno)
+        [Route("urediVezu")]
+        public IActionResult UrediVezuVatrogascaIOpreme([FromBody] OpremaVatrogscaDTO uredeno)
         {
-            var postojece = _context.OpremaVatrogascas.Find(sifra);
+            var postojece = _context.OpremaVatrogascas.           
+                FirstOrDefault(os => os.SifraOpreme == uredeno.SifraOpreme && os.SifraVatrogasca == uredeno.SifraVatrogasca);
+            ;
             if (postojece == null)
             {
                 return NotFound(new { message = "Veza opreme i vatrogasca nije pronađena" });
@@ -179,27 +197,32 @@ namespace VatrogasnaUdruga.Backend.Controllers
                 return BadRequest(new { message = "Količina ne može biti manja od 1." });
             }
 
-            var oprema = _context.Opremas.Find(uredeno.SifraOpreme);
-
-            if (oprema == null)
-            {
-                return NotFound(new { message = "Sifra opreme nije pronađena" });
-            }
-
-            var vatrogasac = _context.Vatrogasacs.Find(uredeno.SifraVatrogasca);
-
-            if (vatrogasac == null)
-            {
-                return NotFound(new { message = "Sifra vatrogasca nije pronađena" });
-            }
-
             postojece.SifraOpreme = uredeno.SifraOpreme;
             postojece.SifraVatrogasca = uredeno.SifraVatrogasca;
+            postojece.Kolicina = uredeno.Kolicina;
 
             _context.OpremaVatrogascas.Update(postojece);
             _context.SaveChanges();
 
             return Ok(postojece);
+        }
+
+        [HttpDelete]
+        [Route("ukloni")]
+        public IActionResult ObrisiVezu([FromBody] OpremaVatrogscaDTO poruka)
+        {
+            var postojece = _context.OpremaVatrogascas.
+                FirstOrDefault(os => os.SifraOpreme == poruka.SifraOpreme && os.SifraVatrogasca == poruka.SifraVatrogasca);
+            ;
+            if (postojece == null)
+            {
+                return NotFound(new { message = "Veza opreme i vatrogasca nije pronađena" });
+            }
+
+            _context.OpremaVatrogascas.Remove(postojece);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Oprema uspješno uklonjena iz skladišta" });
         }
     }
 }

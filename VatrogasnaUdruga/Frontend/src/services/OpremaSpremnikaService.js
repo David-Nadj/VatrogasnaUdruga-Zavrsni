@@ -49,7 +49,7 @@ async function dodaj(oprema){
     })
 }
 
-async function promjena(sifra,smjer){
+async function promjena(sifra, smjer){
     return await HttpService.put('/OpremaSpremnika/uredi/' + sifra,smjer)
     .then((odgovor)=>{
         return {greska: false, poruka: odgovor.data}
@@ -65,6 +65,26 @@ async function promjena(sifra,smjer){
                 return {greska: true, poruka: poruke}
             default:
                 return {greska: true, poruka: 'Oprema spremnika se ne može promjeniti!'}
+        }
+    })
+}
+
+async function urediVezu(veza){
+    return await HttpService.put('/OpremaSpremnika/urediVezu',veza)
+    .then((odgovor)=>{
+        return {greska: false, poruka: odgovor.data}
+    })
+    .catch((e)=>{
+        switch (e.status) {
+            case 400:
+                let poruke='';
+                for(const kljuc in e.response.data.errors){
+                    poruke += kljuc + ': ' + e.response.data.errors[kljuc][0] + ', ';
+                }
+                console.log(poruke)
+                return {greska: true, poruka: poruke}
+            default:
+                return {greska: true, poruka: 'Veza oprema spremnika se ne može promjeniti!'}
         }
     })
 }
@@ -85,5 +105,6 @@ export default {
     dodaj,
     getBySifra,
     promjena,
-    pronadiIUkloni
+    pronadiIUkloni,
+    urediVezu
 }

@@ -73,6 +73,15 @@ namespace VatrogasnaUdruga.Backend.Controllers
                 return NotFound(new { message = "Spremnik nije pronađen" });
             }
 
+            var spremnikVozila = _context.SpremnikVozilas.
+                    Where(os => os.SifraSpremnika == sifra).ToList();
+
+            if (spremnikVozila.Any())
+            {
+                _context.SpremnikVozilas.RemoveRange(spremnikVozila);
+                _context.SaveChanges();
+            }
+
             _context.Spremniks.Remove(spremnik);
             _context.SaveChanges();
 

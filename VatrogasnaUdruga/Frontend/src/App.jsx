@@ -20,6 +20,8 @@ import OpremaSpremnikaVozilaDodaj from './pages/OpremaSpremnikaVozila/OpremaSpre
 import OpremaVatrogasciPregled from './pages/OpremaVatrogasci/OpremaVatrogasciPregled'
 
 import OpremaSkladistaPregled from './pages/OpremaSkladista/OpremaSkladistaPregled'
+import OpremaSkladistaDodaj from './pages/OpremaSkladista/OpremaSkladistaDodaj'
+import OpremaVatrogascaDodaj from './pages/OpremaVatrogasci/OpremaVatrogascaDodaj'
 
 import OpremaPregled from './pages/Oprema/OpremaPregled'
 import OpremaDodaj from './pages/Oprema/OpremaDodaj'
@@ -44,9 +46,10 @@ import SpremnikVozilaUredi from './pages/SpremnikVozila/SpremnikVozilaUredi'
 import VrstaOpremePregled from './pages/VrstaOpreme/VrsteOpremePregled'
 import VrstaOpremeDodaj from './pages/VrstaOpreme/VrsteOpremeDodaj'
 import VrstaOpremeUredi from './pages/VrstaOpreme/VrsteOpremeUredi'
+import Pocetna from './pages/Pocetna'
 
 
-
+OpremaVatrogascaDodaj
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -70,7 +73,11 @@ function App() {
   return (
     <>
       <LoadingSpinner />
-      <Container>
+      <div >
+      <div className="position-fixed top-0 start-0 w-100 h-100">
+        <img src="src/assets/DVD.jpg" className="w-100 h-100 object-fit-cover opacity-25" alt="Background" />
+      </div>
+      <Container className="content .shadow rounded">
         <NavBar/>
         <Routes>
           <Route path={RouteNames.VOZILA} element={<VozilaPregled/>}/>
@@ -112,16 +119,18 @@ function App() {
           <Route path={RouteNames.VRSTA_OPREME_UREDI} element={<VrstaOpremeUredi/>}/>
 
           <Route path={RouteNames.VOZILA_SPREMNICI_OPREMA_NOVO} element={<OpremaSpremnikaVozilaDodaj/>}/>
+          <Route path={RouteNames.OPREMA_SKLADISTA_NOVO} element={<OpremaSkladistaDodaj/>}/>
 
+          <Route path={RouteNames.OPREMA_VATROGASCA_NOVO} element={<OpremaVatrogascaDodaj/>}/>
 
-
-        
+          <Route path={RouteNames.HOME} element={<Pocetna/>}/>
         </Routes>
       </Container>
       <Container>
         <hr />
         David Nađ &copy; {godina()}
       </Container>
+      </div>
     </>
   )
 }

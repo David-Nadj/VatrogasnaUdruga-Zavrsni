@@ -16,7 +16,11 @@ export default function VozilaPregled() {
   const { prikaziError } = useError();
   const navigate = useNavigate();
   const [vozila, setVozila] = useState([]);
-
+  const [editing, setEditing] = useState({
+    sifraOpreme: null,
+    sifraSpremnika: null,
+    kolicina: 0
+  });
 
   function obrisi(sifraOpreme, sifraSpremnika, kolicina){
     if(!confirm('Sigurno obrisati?')){
@@ -35,7 +39,6 @@ async function brisanjeOpremeSpremnika(e) {
     }
     dohvatiPodatke();
 }
-
 
   async function dohvatiPodatke() {
     showLoading();
@@ -124,6 +127,61 @@ async function brisanjeOpremeSpremnika(e) {
     hideLoading();
   }
 
+  async function urediOpremuSpremnika() {
+    showLoading();
+    try {
+      console.log(editing.sifraOpreme)
+      const sifraOpreme = editing.sifraOpreme;
+      const sifraSpremnika = editing.sifraSpremnika;
+      const kolicina = editing.kolicina;
+
+        const odgovor = await OpremaSpremnikaService.urediVezu(
+          { 
+            sifraOpreme,
+            sifraSpremnika,
+            kolicina
+          } 
+        );
+        hideLoading();
+        
+        if(odgovor.greska){
+            prikaziError(odgovor.poruka);
+            return;
+        }
+        dohvatiPodatke();
+        setEditing({
+          sifraOpreme: null,
+          sifraSpremnika: null,
+          kolicina: 0
+      });
+    } catch (error) {
+        hideLoading();
+        prikaziError("Greška pri ažuriranju količine.");
+    }
+  }
+
+  function startEditing(oprema, spremnik) {
+    setEditing({
+        sifraOpreme: oprema.sifra,
+        sifraSpremnika: spremnik.sifra,
+        kolicina: oprema.kolicina
+    });
+  }
+
+  function handleQuantityChange(e) {
+    setEditing(prev => ({
+        ...prev,
+        kolicina: parseInt(e.target.value) || 0
+    }));
+  }
+
+  function cancelEditing() {
+    setEditing({
+        sifraOpreme: null,
+        sifraSpremnika: null,
+        kolicina: 0
+    });
+  }
   useEffect(() => {
     dohvatiPodatke();
   }, []);
@@ -146,6 +204,7 @@ async function brisanjeOpremeSpremnika(e) {
                     <th>Oprema</th>
                     <th>Količina</th>
                     <th>Vrsta opreme</th>
+                    <th>Akcije</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,13 +212,57 @@ async function brisanjeOpremeSpremnika(e) {
                     spremnik.oprema.map((oprema) => (
                       <tr key={oprema.sifra}>
                         <td>{oprema.naziv}</td>
-                        <td>{oprema.kolicina}</td>
+                        <td>
+                          {editing.sifraOpreme === oprema.sifra && 
+                           editing.sifraSpremnika === spremnik.sifra ? (
+                            <input
+                              type="number"
+                              value={editing.kolicina}
+                              onChange={handleQuantityChange}
+                              min="0"
+                              className="form-control"
+                              style={{ width: '80px' }}
+                            />
+                          ) : (
+                            oprema.kolicina
+                          )}
+                        </td>
                         <td>{oprema.vrstaOpremeNaziv}</td>
                         <td>
-                          <Button variant="primary" onClick={() => navigate(`/oprema/uredi/${oprema.sifra}`)}>
-                            Uredi opremu
-                          </Button>
-                          <Button variant="danger" onClick={() => obrisi(oprema.sifra, spremnik.sifra, oprema.kolicina)}>Obrisi opremu</Button>
+                          {editing.sifraOpreme === oprema.sifra && 
+                           editing.sifraSpremnika === spremnik.sifra ? (
+                            <>
+                              <Button 
+                                variant="success" 
+                                onClick={urediOpremuSpremnika}
+                                className="mr-2"
+                              >
+                                Spremi
+                              </Button>
+                              <Button 
+                                variant="secondary" 
+                                onClick={cancelEditing}
+                              >
+                                Odustani
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button 
+                                variant="primary" 
+                                onClick={() => startEditing(oprema, spremnik)}
+                                className="mr-2"
+                              >
+                                Uredi količinu
+                              </Button>
+                              <Button 
+                                variant="danger" 
+                                onClick={() => obrisi(oprema.sifra, spremnik.sifra, oprema.kolicina)}
+                              >
+                                Obriši opremu
+                              </Button>
+                            </>
+                          )}
                         </td>
                       </tr>
                     ))
@@ -176,16 +279,12 @@ async function brisanjeOpremeSpremnika(e) {
                 <Button variant="success" className="ml-3" onClick={() => navigate(`/opremaSpremnikaVozila/dodajOpremu/${spremnik.sifra}`)}>
                   Dodaj opremu
                  </Button>
-                <Button variant="secondary" className="mr-2" onClick={() => navigate(`/spremnik/uredi/${spremnik.sifra}`)}>
-                  Uredi spremnik
-                </Button>
               </div>
             </div>
           ))
           ) : (
           <p>Nema spremnika za ovo vozilo.</p>
           )}
-
         </div>
       ))}
     </div>
