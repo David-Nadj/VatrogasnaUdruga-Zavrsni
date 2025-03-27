@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import dvdImage from './assets/DVD.jpg';
 import { Container, NavbarBrand } from 'react-bootstrap'
 import { Routes, Route } from 'react-router-dom'
 import { RouteNames } from './constants'
@@ -75,7 +74,9 @@ function App() {
       <LoadingSpinner />
       <div >
       <div className="position-fixed top-0 start-0 w-100 h-100">
-        <img src="src/assets/DVD.jpg" className="w-100 h-100 object-fit-cover opacity-25" alt="Background" />
+         
+  
+        <div className="w-100 h-100 object-fit-cover opacity-25 background" alt="Background" style={{ background: `url(${dvdImage}) no-repeat center center/cover`}}/>
       </div>
       <Container className="content .shadow rounded">
         <NavBar/>

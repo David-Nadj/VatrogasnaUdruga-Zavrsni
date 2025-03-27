@@ -16,7 +16,6 @@ export const RouteNames={
     VRSTA_VOZILA_UREDI: '/vrsteVozila/uredi/:sifra',
 
     VATROGASCI_OPREMA: '/vatrogasci/oprema',
-    VATROGASCI_OPREMA_NOVO: '/vatrogasci/dodaj',
     VATROGASCI_OPREMA_UREDI: '/vatrogasci/uredi/:sifra',
 
     SKLADISTA_OPREMA: '/skladista/oprema',
