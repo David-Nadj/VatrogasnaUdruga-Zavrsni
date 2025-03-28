@@ -110,7 +110,7 @@ namespace VatrogasnaUdruga.Backend.Controllers
             var vatrogasac = _context.Vatrogasacs.Find(sifra);
             if (vatrogasac == null)
             {
-                return NotFound(new { message = "Vozilo nije pronađeno" });
+                return NotFound(new { message = "Vatrogasac nije pronađen" });
             }
 
             vatrogasac.Ime = uredeniVatrogasac.Ime;

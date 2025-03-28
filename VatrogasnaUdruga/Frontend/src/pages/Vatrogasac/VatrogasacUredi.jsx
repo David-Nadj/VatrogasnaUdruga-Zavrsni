@@ -23,19 +23,16 @@ export default function VatrogasacDodaj() {
 
   async function dohvatiPodatke(){
     showLoading();
-  
-    hideLoading();
-
-    showLoading();
     const vatrogasacPodatci = await VatrogasacService.getBySifra(routeParams.sifra);
+    hideLoading();
 
     setVatrogasac(vatrogasacPodatci);
     hideLoading();
     setIme(vatrogasacPodatci.poruka.ime);
     setPrezime(vatrogasacPodatci.poruka.prezime);
     setBrojTelefona(vatrogasacPodatci.poruka.brojTelefona);
-    setGodinaRodenja(new Date(vatrogasacPodatci.poruka.godinaRodenja) || new Date());
-    
+    setGodinaRodenja(new Date(vatrogasacPodatci.poruka.godinaRodenja, 0, 1));
+    console.log(savedGodinaRodenja)
   }
 
   useEffect(() => {
@@ -44,12 +41,13 @@ export default function VatrogasacDodaj() {
 
   function obradiSubmit(e) {
     e.preventDefault();
-
+    const dateFromPicker = new Date(savedGodinaRodenja);
+    const year = dateFromPicker.getFullYear(); // → 2000
     const ime = e.target.ime.value;
     const prezime = e.target.prezime.value;
-    const brojTelefona = parseInt(e.target.brojTelefona.value);
-    const godinaRodenja = savedGodinaRodenja.toISOString().split('T')[0];
-  
+    const brojTelefona = e.target.brojTelefona.value;
+    const godinaRodenja = year;
+
     promjeni(routeParams.sifra, {
       ime,
       prezime,
@@ -81,7 +79,7 @@ export default function VatrogasacDodaj() {
           <Form.Control 
             type="text" 
             name="ime" 
-            defaultValue={savedIme}  // Use state to bind the value
+            defaultValue={savedIme}
             required 
           />
         </Form.Group>
@@ -91,7 +89,7 @@ export default function VatrogasacDodaj() {
           <Form.Control 
             type="text" 
             name="prezime" 
-            defaultValue={savedPrezime}  // Use state to bind the value
+            defaultValue={savedPrezime} 
             required 
           />
         </Form.Group>
@@ -99,9 +97,9 @@ export default function VatrogasacDodaj() {
         <Form.Group controlId="brojTelefona">
           <Form.Label>Broj telefona</Form.Label>
           <Form.Control 
-            type="number" 
+            type="text" 
             name="brojTelefona" 
-            defaultValue={savedBrojTelefona}  // Use state to bind the value
+            defaultValue={savedBrojTelefona} 
             required 
           />
         </Form.Group>
@@ -112,7 +110,7 @@ export default function VatrogasacDodaj() {
           onChange={date => setGodinaRodenja(date)}
           showYearPicker
           dateFormat="yyyy"
-          yearDropdownItemNumber={100} // Show last 100 years
+          yearDropdownItemNumber={100}
           scrollableYearDropdown
         />
       </Form.Group>
